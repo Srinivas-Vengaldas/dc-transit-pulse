@@ -17,7 +17,7 @@ import logging
 import os
 import sys
 from collections import Counter
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 import requests
@@ -44,8 +44,8 @@ def parse_feed(raw: bytes) -> gtfs_realtime_pb2.FeedMessage:
 
 def summarize(feed: gtfs_realtime_pb2.FeedMessage) -> None:
     """Print header, entity counts, feed age, and two sample entities."""
-    header_ts = datetime.fromtimestamp(feed.header.timestamp, tz=timezone.utc)
-    age_s = (datetime.now(timezone.utc) - header_ts).total_seconds()
+    header_ts = datetime.fromtimestamp(feed.header.timestamp, tz=UTC)
+    age_s = (datetime.now(UTC) - header_ts).total_seconds()
     print(f"gtfs_realtime_version: {feed.header.gtfs_realtime_version}")
     print(f"header timestamp (UTC): {header_ts.isoformat()}  (age {age_s:.0f}s)")
     print(f"entities: {len(feed.entity)}")
@@ -77,7 +77,7 @@ def main() -> int:
     log.info("downloaded %d bytes from %s", len(raw), url)
 
     # Keep the raw bytes: we can replay/re-parse later without hitting the API.
-    out = Path("samples") / f"{Path(url).stem}_{datetime.now(timezone.utc):%Y%m%dT%H%M%SZ}.pb"
+    out = Path("samples") / f"{Path(url).stem}_{datetime.now(UTC):%Y%m%dT%H%M%SZ}.pb"
     out.parent.mkdir(exist_ok=True)
     out.write_bytes(raw)
     log.info("saved raw snapshot to %s", out)

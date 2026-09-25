@@ -35,6 +35,14 @@ cp .env.example .env        # then put your real WMATA key in .env
 set -a; source .env; set +a # export the variables into your shell
 ```
 
+Run the producer (writes to `LANDING_DIR`, default `./data/landing`) and the tests:
+
+```bash
+python -m producer.fetch_gtfs_rt --once
+python -m producer.fetch_gtfs_rt --max-polls 10
+pytest
+```
+
 Secrets live only in `.env` (git-ignored) locally and in Databricks secrets in the workspace.
 
 ## Data sources
