@@ -112,3 +112,16 @@ def test_poll_once_skips_snapshot_already_landed(tmp_path: Path) -> None:
     assert first == {"vehicle_positions": 1}
     assert second == {"vehicle_positions": 0}
     assert len(list(tmp_path.rglob("*.jsonl"))) == 1
+
+
+def test_poll_once_upload_failure_keeps_local_file(tmp_path: Path) -> None:
+    class BrokenUploader:
+        def upload(self, path: Path) -> str:
+            raise ConnectionError("network down")
+
+    raw = make_feed(["a"]).SerializeToString()
+    cfg = p.Config(api_key="k", feeds={"vehicle_positions": "u"}, landing_dir=tmp_path, poll_interval_s=30)
+    written = p.poll_once(FakeSession([FakeResponse(200, raw)]), cfg, BrokenUploader())  # type: ignore[arg-type]
+
+    assert written == {"vehicle_positions": 1}
+    assert len(list(tmp_path.rglob("*.jsonl"))) == 1

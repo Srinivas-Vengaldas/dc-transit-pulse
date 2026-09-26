@@ -43,6 +43,9 @@ python -m producer.fetch_gtfs_rt --max-polls 10
 pytest
 ```
 
+On Databricks (Git folder + notebook): `pipelines/static_to_delta.py` loads the GTFS static zip,
+`pipelines/bronze_ingest.py` runs Auto Loader over the landing Volume. See each module's docstring.
+
 Secrets live only in `.env` (git-ignored) locally and in Databricks secrets in the workspace.
 
 ## Data sources

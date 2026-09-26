@@ -33,6 +33,8 @@ import requests
 from google.protobuf.json_format import MessageToDict
 from google.transit import gtfs_realtime_pb2
 
+from producer.volume_sink import VolumeUploader
+
 log = logging.getLogger("producer")
 
 # HTTP statuses worth retrying: rate limiting and transient server errors.
@@ -47,6 +49,7 @@ class Config:
     feeds: dict[str, str]  # feed name -> URL
     landing_dir: Path
     poll_interval_s: int
+    volume_root: str | None = None  # e.g. /Volumes/workspace/transit/raw/landing
 
     @classmethod
     def from_env(cls) -> Config:
@@ -62,6 +65,7 @@ class Config:
             },
             landing_dir=Path(os.environ.get("LANDING_DIR", "./data/landing")),
             poll_interval_s=int(os.environ.get("POLL_INTERVAL_SECONDS", "30")),
+            volume_root=os.environ.get("DATABRICKS_VOLUME_LANDING") or None,
         )
 
 
@@ -143,8 +147,14 @@ def write_atomically(path: Path, records: Iterator[dict]) -> int:
     return n
 
 
-def poll_once(session: requests.Session, cfg: Config) -> dict[str, int]:
-    """Fetch every feed once and land new snapshots. Returns records written per feed."""
+def poll_once(
+    session: requests.Session, cfg: Config, uploader: VolumeUploader | None = None
+) -> dict[str, int]:
+    """Fetch every feed once and land new snapshots. Returns records written per feed.
+
+    If an uploader is given, each new file is also copied to the Databricks Volume.
+    An upload failure is logged but does not stop polling; the local file is kept.
+    """
     written: dict[str, int] = {}
     for feed_name, url in cfg.feeds.items():
         try:
@@ -165,16 +175,23 @@ def poll_once(session: requests.Session, cfg: Config) -> dict[str, int]:
         age_s = fetched_at.timestamp() - feed.header.timestamp
         log.info("%s: %d records, %d bytes, feed age %.0fs -> %s", feed_name, n, len(raw), age_s, path)
         written[feed_name] = n
+        if uploader is not None:
+            try:
+                log.info("%s: uploaded to %s", feed_name, uploader.upload(path))
+            except Exception as exc:  # network or auth errors must not kill the poll loop
+                log.error("%s: upload failed, file kept locally: %s", feed_name, exc)
     return written
 
 
 def run(cfg: Config, max_polls: int | None) -> None:
     """Poll on a fixed interval until max_polls is reached or Ctrl+C."""
     polls = 0
+    uploader = VolumeUploader(cfg.volume_root, cfg.landing_dir) if cfg.volume_root else None
+    log.info("landing to %s%s", cfg.landing_dir, f" and uploading to {cfg.volume_root}" if uploader else "")
     with requests.Session() as session:
         while max_polls is None or polls < max_polls:
             started = time.monotonic()
-            poll_once(session, cfg)
+            poll_once(session, cfg, uploader)
             polls += 1
             if max_polls is not None and polls >= max_polls:
                 break
