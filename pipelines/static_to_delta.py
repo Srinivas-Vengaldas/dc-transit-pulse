@@ -99,7 +99,8 @@ def load_static(
             # Replace only this version's rows: rerunning is safe, older versions stay.
             writer.mode("overwrite").option("replaceWhere", f"feed_version = '{version}'").saveAsTable(table)
         else:
-            writer.mode("errorifexists").saveAsTable(table)
+            # First load creates the table. (Serverless compute rejects mode "errorifexists".)
+            writer.mode("append").saveAsTable(table)
         counts[name] = spark.table(table).where(F.col("feed_version") == version).count()
         log.info("%s: %d rows", table, counts[name])
     return counts
