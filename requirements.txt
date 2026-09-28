@@ -1,0 +1,5 @@
+# Runtime dependencies for the producer.
+# Versions are lower bounds; run `pip list --outdated` to check for newer releases.
+requests>=2.31
+gtfs-realtime-bindings>=1.0.0
+databricks-sdk>=0.40
