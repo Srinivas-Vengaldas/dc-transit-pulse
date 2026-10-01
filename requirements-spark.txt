@@ -1,0 +1,5 @@
+# Local Spark + Delta, only for the Spark tests (Databricks provides both at runtime).
+# Needs Java 17+. Pin to the same minor versions: delta-spark 4.0.x pairs with pyspark 4.0.x.
+-r requirements-dev.txt
+pyspark>=4.0,<4.1
+delta-spark>=4.0,<4.1
