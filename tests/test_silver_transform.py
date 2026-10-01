@@ -8,7 +8,14 @@ from pathlib import Path
 
 import pytest
 
-from pipelines.silver_transform import FEEDS, checkpoint_paths, merge_condition, reconcile, run_silver_feed
+from pipelines.silver_transform import (
+    FEEDS,
+    checkpoint_paths,
+    merge_condition,
+    reconcile,
+    reset_silver,
+    run_silver_feed,
+)
 
 FETCHED = datetime(2026, 10, 1, 4, 31, tzinfo=UTC)
 
@@ -241,3 +248,15 @@ def test_trip_updates_end_to_end(spark, lake) -> None:
     run_silver_feed(spark, "trip_updates", **lake)
     run_silver_feed(spark, "trip_updates", **lake)
     assert count(spark, "silver_trip_updates") == 2
+
+
+def test_dropping_only_the_table_is_caught_and_reset_rebuilds(spark, lake) -> None:
+    t0 = epoch(2026, 10, 1, 4, 30)
+    append_bronze(spark, "vehicle_positions", [vp("1", t0), vp("2", t0)])
+    run_silver_feed(spark, "vehicle_positions", **lake)
+    spark.sql("DROP TABLE spark_catalog.t_silver.silver_vehicle_positions")
+    with pytest.raises(RuntimeError, match="reset_silver"):
+        run_silver_feed(spark, "vehicle_positions", **lake)
+
+    reset_silver(spark, lake["raw_volume"], lake["catalog"], lake["schema"])
+    assert run_silver_feed(spark, "vehicle_positions", **lake)["silver_rows_added"] == 2

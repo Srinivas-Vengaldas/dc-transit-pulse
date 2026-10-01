@@ -28,6 +28,8 @@ Usage in a Databricks notebook:
 from __future__ import annotations
 
 import logging
+import os
+import shutil
 from collections.abc import Callable
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
@@ -295,11 +297,32 @@ def merge_condition(key: tuple[str, ...]) -> str:
     return " AND ".join(f"t.{k} <=> s.{k}" for k in key)
 
 
-def ensure_table(spark: SparkSession, table: str, like: DataFrame) -> None:
-    """Create an empty Delta table with `like`'s schema if it does not exist yet."""
-    if not spark.catalog.tableExists(table):
-        like.limit(0).write.format("delta").mode("append").saveAsTable(table)
-        log.info("created %s", table)
+def ensure_table(spark: SparkSession, table: str, like: DataFrame) -> bool:
+    """Create an empty Delta table with `like`'s schema if it does not exist yet. True if created."""
+    if spark.catalog.tableExists(table):
+        return False
+    like.limit(0).write.format("delta").mode("append").saveAsTable(table)
+    log.info("created %s", table)
+    return True
+
+
+def reset_silver(
+    spark: SparkSession, raw_volume: str, catalog: str = "workspace", schema: str = "transit"
+) -> None:
+    """Drop the silver tables AND their checkpoints, so the next run_silver rebuilds from all of bronze.
+
+    A table and its checkpoint are one unit: the checkpoint records which bronze
+    rows were already written to the table. Dropping only the table leaves a
+    checkpoint that says "done", and the rebuilt table stays empty.
+    """
+    for feed, spec in FEEDS.items():
+        spark.sql(f"DROP TABLE IF EXISTS {spec.silver_table(catalog, schema)}")
+        for path in checkpoint_paths(raw_volume, feed).values():
+            shutil.rmtree(path, ignore_errors=True)
+            if os.path.exists(path):
+                raise RuntimeError(f"could not delete checkpoint {path}")
+    spark.sql(f"DROP TABLE IF EXISTS {catalog}.{schema}.silver_quarantine")
+    log.info("silver tables and checkpoints removed")
 
 
 def make_merge_batch(table: str, key: tuple[str, ...]) -> Callable[[DataFrame, int], None]:
@@ -377,13 +400,18 @@ def run_silver_feed(
         .withColumn("_silver_loaded_at", F.current_timestamp())
     )
     # Same columns as `valid`, from a batch read, so the MERGE target exists before the first batch.
-    ensure_table(
+    created = ensure_table(
         spark,
         silver,
         spec.parse(spark.table(spec.bronze_table(catalog, schema)))
         .drop("_dq_reason")
         .withColumn("_silver_loaded_at", F.current_timestamp()),
     )
+    if created and os.path.exists(cps["silver"]):
+        raise RuntimeError(
+            f"{silver} was missing but its checkpoint {cps['silver']} exists, so the new table would "
+            "silently skip every bronze row already processed. Run reset_silver() to start clean."
+        )
     silver_before, quarantine_before = spark.table(silver).count(), quarantined()
     silver_q = (
         valid.withWatermark("event_ts", watermark_delay)
