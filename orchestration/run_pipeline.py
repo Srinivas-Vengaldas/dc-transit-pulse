@@ -1,9 +1,10 @@
 """One step of the scheduled pipeline, run as a Databricks job task.
 
-The job (orchestration/workflow.json) runs four tasks in order, each calling
-this file with a different --step:
+The job (orchestration/workflow.json) runs these tasks, each calling this file
+with a different --step:
 
     collect --> bronze --> silver --> gold
+    weather   (independent: a weather API outage never blocks the transit tables)
 
 - collect: polls WMATA for --polls snapshots and writes them straight into the
   landing folder of the raw Volume (the API key comes from a Databricks secret).
@@ -39,7 +40,7 @@ if str(REPO_ROOT) not in sys.path:
 
 log = logging.getLogger("run_pipeline")
 
-STEPS = ("collect", "bronze", "silver", "gold")
+STEPS = ("collect", "bronze", "silver", "gold", "weather")
 FEED_URLS = {
     "vehicle_positions": "https://api.wmata.com/gtfs/bus-gtfsrt-vehiclepositions.pb",
     "trip_updates": "https://api.wmata.com/gtfs/bus-gtfsrt-tripupdates.pb",
@@ -95,6 +96,10 @@ def run_step(spark: SparkSession, step: str, args: argparse.Namespace) -> dict:
         out = build_gold(spark)
         return {"start": str(out["start"]), "end": str(out["end"]), "rows": out["rows"],
                 "freshness_s": gold_freshness_s(spark)}
+    if step == "weather":
+        from pipelines.weather import load_weather
+
+        return load_weather(spark)
     raise ValueError(f"unknown step {step!r}; expected one of {STEPS}")
 
 

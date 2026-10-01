@@ -16,7 +16,8 @@ REPO = "/Workspace/Users/someone/dc-transit-pulse"
 def test_job_runs_steps_in_order_with_retries() -> None:
     s = job_settings(REPO)
     tasks = {t["task_key"]: t for t in s["tasks"]}
-    assert list(tasks) == ["collect", "bronze", "silver", "gold"]
+    assert list(tasks) == ["collect", "bronze", "silver", "gold", "weather"]
+    assert "depends_on" not in tasks["weather"]  # a weather outage never blocks the transit tables
     assert tasks["silver"]["depends_on"] == [{"task_key": "bronze"}]
     assert tasks["gold"]["depends_on"] == [{"task_key": "silver"}]
     # Bronze still runs if collect fails: files that did land are not left waiting.

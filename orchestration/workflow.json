@@ -115,6 +115,23 @@
           "task_key": "silver"
         }
       ]
+    },
+    {
+      "task_key": "weather",
+      "spark_python_task": {
+        "python_file": "{repo}/orchestration/run_pipeline.py",
+        "parameters": [
+          "--step",
+          "weather",
+          "--run-id",
+          "{{job.run_id}}"
+        ]
+      },
+      "environment_key": "default",
+      "max_retries": 2,
+      "min_retry_interval_millis": 60000,
+      "retry_on_timeout": true,
+      "timeout_seconds": 1800
     }
   ]
 }
