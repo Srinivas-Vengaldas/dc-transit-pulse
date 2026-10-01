@@ -156,8 +156,10 @@ with tabs[0]:
         chart((lines + dots).properties(height=220))
         n_bunched = int((snap["bunching_example"]["headway_status"] == "bunched").sum())
         st.caption(
-            f"{len(snap['bunching_example'])} buses at this stop that day; {n_bunched} arrived "
-            "bunched with the bus ahead. Chosen automatically as the stop-day with the most bunching."
+            f"{len(snap['bunching_example'])} buses observed at this stop that day; {n_bunched} left "
+            "bunched with the bus ahead. Chosen automatically as the stop-day with the most bunching. "
+            "Buses are observed only while the pipeline collects (10 minutes every 2 hours), so this "
+            "shows the buses seen in those windows, not every bus of the day."
         )
 
     st.markdown(
