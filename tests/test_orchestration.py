@@ -48,8 +48,10 @@ class FakeWorkspace:
         self.jobs = SimpleNamespace(list=lambda name: [SimpleNamespace(job_id=j) for j in existing])
         self.api_client = SimpleNamespace(do=self._do)
 
-    def _do(self, method: str, path: str, body: dict) -> dict:
+    def _do(self, method: str, path: str, body: dict | None = None, query: dict | None = None) -> dict:
         self.calls.append((method, path, body))
+        if path.endswith("/jobs/get"):
+            return {"settings": {"schedule": {"pause_status": "UNPAUSED"}}}
         return {"job_id": 42}
 
 
@@ -59,7 +61,11 @@ def test_upsert_creates_then_updates_in_place() -> None:
     assert upsert_job(new, settings) == 42 and new.calls[0][1] == "/api/2.2/jobs/create"
     old = FakeWorkspace(existing=[7])
     assert upsert_job(old, settings) == 7
-    assert old.calls[0][1] == "/api/2.2/jobs/reset" and old.calls[0][2]["job_id"] == 7
+    reset = old.calls[-1]
+    assert reset[1] == "/api/2.2/jobs/reset" and reset[2]["job_id"] == 7
+    # An unpaused job stays unpaused when the code is updated.
+    assert reset[2]["new_settings"]["schedule"]["pause_status"] == "UNPAUSED"
+    assert settings["schedule"]["pause_status"] == "PAUSED"  # the file itself is untouched
 
 
 def test_upsert_refuses_duplicate_names() -> None:

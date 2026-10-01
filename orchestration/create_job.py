@@ -13,6 +13,7 @@ from the token, so no email is typed by hand.
 --put-secret copies WMATA_API_KEY from your environment into the Databricks
 secret scope the collect task reads, so the key never appears in the job or the repo.
 The schedule is created PAUSED: unpause it in the Jobs UI after a manual run succeeds.
+Later updates keep whatever pause state the job has.
 """
 from __future__ import annotations
 
@@ -56,6 +57,11 @@ def upsert_job(w: Any, settings: dict[str, Any]) -> int:
     if len(existing) > 1:
         raise RuntimeError(f"{len(existing)} jobs named {settings['name']!r}; delete the extras first")
     if existing:
+        # Keep the schedule paused or unpaused as it is now: updating the code must not switch it.
+        current = w.api_client.do("GET", "/api/2.2/jobs/get", query={"job_id": existing[0]})
+        status = current.get("settings", {}).get("schedule", {}).get("pause_status")
+        if status and "schedule" in settings:
+            settings = {**settings, "schedule": {**settings["schedule"], "pause_status": status}}
         w.api_client.do("POST", "/api/2.2/jobs/reset", body={"job_id": existing[0], "new_settings": settings})
         log.info("updated job %s", existing[0])
         return existing[0]
