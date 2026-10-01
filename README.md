@@ -5,13 +5,14 @@ GTFS-Realtime feeds, Databricks Auto Loader ingests the raw files into a bronze 
 table, and PySpark builds silver and gold layers for reliability analytics
 (on-time performance, delay by route and hour, bus bunching).
 
-> Status: Week 3 of 4, gold marts and scheduled job. Results and metrics will be added only once measured.
+> Status: Week 4 of 4, dashboard and optimization. Results and metrics will be added only once measured.
 
 ## Architecture
 
 ```
 WMATA GTFS-RT (protobuf) --> producer (Python, every 30 s) --> landing files
-    --> Auto Loader --> bronze Delta --> silver Delta --> gold marts --> dashboard
+    --> Auto Loader --> bronze Delta --> silver Delta --> gold marts --> quality checks
+    --> CSV snapshot --> Streamlit dashboard
 WMATA GTFS static (zip) -----------------> static Delta tables (SCD Type 2 by feed_version)
 ```
 
@@ -21,6 +22,8 @@ WMATA GTFS static (zip) -----------------> static Delta tables (SCD Type 2 by fe
 |---|---|
 | `producer/` | Polls GTFS-RT feeds and writes raw snapshots to the landing zone |
 | `pipelines/` | Databricks jobs: static load, bronze ingest, silver, gold |
+| `dashboard/` | Streamlit app that reads the exported gold snapshot |
+| `orchestration/` | The Databricks job as code and the step runner |
 | `tests/` | pytest unit tests for transformations |
 | `exploration/` | One-off scripts used to understand the feeds before designing schemas |
 | `docs/` | Architecture diagram and design notes |
@@ -58,11 +61,14 @@ On Databricks (Git folder + notebook), each module's docstring shows how to call
 | `pipelines/gold_marts.py` | `gold_timepoint_departures`, `gold_route_hour_performance` (on-time % and delay), `gold_headways`, `gold_route_hour_bunching` |
 | `pipelines/weather.py` | `silver_weather_hourly` from Open-Meteo, and the view `gold_route_hour_weather` |
 | `pipelines/quality.py` | Data-quality checks on silver and gold, results in `dq_results` |
+| `pipelines/metrics.py` | The pipeline metrics (events per day, freshness, rows removed, DQ pass rate, runtimes) as SQL |
+| `pipelines/export_dashboard.py` | Aggregated CSV snapshot of gold for the dashboard, plus `manifest.json` |
+| `pipelines/optimize.py` | Liquid clustering + OPTIMIZE, with before/after benchmarks in `ops_benchmarks` |
 
 ## Scheduled job
 
 `orchestration/workflow.json` defines one Databricks job of serverless tasks,
-`collect -> bronze -> silver -> gold -> quality`, plus an independent `weather` task, with retries. Every task appends a row to
+`collect -> bronze -> silver -> gold -> quality -> export`, plus an independent `weather` task, with retries. Every task appends a row to
 `ops_run_log`, which is where events per day and data freshness are measured.
 
 ```bash
@@ -81,6 +87,26 @@ The schedule is created paused; unpause it in the Jobs UI once a manual run succ
 | Bunched / gapped | Actual headway below 25% / above 150% of the scheduled gap between the same two trips |
 
 Secrets live only in `.env` (git-ignored) locally and in Databricks secrets in the workspace.
+
+## Dashboard
+
+`dashboard/app.py` is a Streamlit app that tells the story in six tabs: the problem (with a real
+bunching example), which routes, when, where (map of timepoints), rain, and how the pipeline is built.
+
+It reads a **snapshot**, not a live connection. The `export` job task writes small aggregated CSVs
+and a `manifest.json` to the Volume after the quality checks pass; `fetch_snapshot` copies them into
+`dashboard/snapshot/`. A live query from a public app would need a running SQL warehouse and a
+token stored in the app; the snapshot costs nothing to view and holds no credentials.
+
+```bash
+set -a; source .env; set +a
+python -m dashboard.fetch_snapshot
+pip install -r dashboard/requirements.txt
+streamlit run dashboard/app.py
+```
+
+To publish it, commit `dashboard/snapshot/` and deploy `dashboard/app.py` on
+[Streamlit Community Cloud](https://streamlit.io/cloud) (free, public URL).
 
 ## Data sources
 

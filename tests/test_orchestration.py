@@ -16,8 +16,11 @@ REPO = "/Workspace/Users/someone/dc-transit-pulse"
 def test_job_runs_steps_in_order_with_retries() -> None:
     s = job_settings(REPO)
     tasks = {t["task_key"]: t for t in s["tasks"]}
-    assert list(tasks) == ["collect", "bronze", "silver", "gold", "quality", "weather"]
+    assert list(tasks) == ["collect", "bronze", "silver", "gold", "quality", "export", "weather"]
     assert tasks["quality"]["depends_on"] == [{"task_key": "gold"}]
+    # The dashboard snapshot is published only after the checks pass (default run_if ALL_SUCCESS).
+    assert tasks["export"]["depends_on"] == [{"task_key": "quality"}]
+    assert "run_if" not in tasks["export"]
     assert tasks["quality"]["max_retries"] == 0  # a failed check is a data problem; retrying cannot fix it
     assert "depends_on" not in tasks["weather"]  # a weather outage never blocks the transit tables
     assert tasks["silver"]["depends_on"] == [{"task_key": "bronze"}]
