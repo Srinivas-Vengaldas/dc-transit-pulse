@@ -5,7 +5,7 @@ GTFS-Realtime feeds, Databricks Auto Loader ingests the raw files into a bronze 
 table, and PySpark builds silver and gold layers for reliability analytics
 (on-time performance, delay by route and hour, bus bunching).
 
-> Status: Week 1 of 4, repository scaffold. Results and metrics will be added only once measured.
+> Status: Week 2 of 4, silver layer. Results and metrics will be added only once measured.
 
 ## Architecture
 
@@ -43,8 +43,18 @@ python -m producer.fetch_gtfs_rt --max-polls 10
 pytest
 ```
 
-On Databricks (Git folder + notebook): `pipelines/static_to_delta.py` loads the GTFS static zip,
-`pipelines/bronze_ingest.py` runs Auto Loader over the landing Volume. See each module's docstring.
+The Spark tests (silver, SCD Type 2) run on a local Spark + Delta session and are skipped
+unless you install them (needs Java 17+): `pip install -r requirements-spark.txt`. CI runs everything.
+
+On Databricks (Git folder + notebook), each module's docstring shows how to call it:
+
+| Module | Builds |
+|---|---|
+| `pipelines/static_to_delta.py` | `static_<file>` tables from the GTFS static zip, one set per `feed_version` |
+| `pipelines/bronze_ingest.py` | `bronze_vehicle_positions`, `bronze_trip_updates` with Auto Loader |
+| `pipelines/silver_transform.py` | `silver_vehicle_positions`, `silver_trip_updates` (typed, deduped with a watermark and MERGE), `silver_quarantine` (rows that fail checks), plus `reconcile()` |
+| `pipelines/static_silver.py` | `silver_stop_times` with GTFS times as seconds (hours can be >= 24) |
+| `pipelines/dim_scd2.py` | `dim_routes`, `dim_stops` as SCD Type 2, and the view `silver_vehicle_positions_enriched` (point-in-time route join) |
 
 Secrets live only in `.env` (git-ignored) locally and in Databricks secrets in the workspace.
 
