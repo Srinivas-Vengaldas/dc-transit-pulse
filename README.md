@@ -56,11 +56,13 @@ On Databricks (Git folder + notebook), each module's docstring shows how to call
 | `pipelines/static_silver.py` | `silver_stop_times` with GTFS times as seconds (hours can be >= 24) |
 | `pipelines/dim_scd2.py` | `dim_routes`, `dim_stops` as SCD Type 2, and the view `silver_vehicle_positions_enriched` (point-in-time route join) |
 | `pipelines/gold_marts.py` | `gold_timepoint_departures`, `gold_route_hour_performance` (on-time % and delay), `gold_headways`, `gold_route_hour_bunching` |
+| `pipelines/weather.py` | `silver_weather_hourly` from Open-Meteo, and the view `gold_route_hour_weather` |
+| `pipelines/quality.py` | Data-quality checks on silver and gold, results in `dq_results` |
 
 ## Scheduled job
 
-`orchestration/workflow.json` defines one Databricks job with four serverless tasks,
-`collect -> bronze -> silver -> gold`, each with retries. Every task appends a row to
+`orchestration/workflow.json` defines one Databricks job of serverless tasks,
+`collect -> bronze -> silver -> gold -> quality`, plus an independent `weather` task, with retries. Every task appends a row to
 `ops_run_log`, which is where events per day and data freshness are measured.
 
 ```bash

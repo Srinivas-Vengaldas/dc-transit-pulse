@@ -117,6 +117,28 @@
       ]
     },
     {
+      "task_key": "quality",
+      "spark_python_task": {
+        "python_file": "{repo}/orchestration/run_pipeline.py",
+        "parameters": [
+          "--step",
+          "quality",
+          "--run-id",
+          "{{job.run_id}}"
+        ]
+      },
+      "environment_key": "default",
+      "max_retries": 0,
+      "min_retry_interval_millis": 60000,
+      "retry_on_timeout": false,
+      "timeout_seconds": 1800,
+      "depends_on": [
+        {
+          "task_key": "gold"
+        }
+      ]
+    },
+    {
       "task_key": "weather",
       "spark_python_task": {
         "python_file": "{repo}/orchestration/run_pipeline.py",

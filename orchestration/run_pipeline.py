@@ -3,12 +3,13 @@
 The job (orchestration/workflow.json) runs these tasks, each calling this file
 with a different --step:
 
-    collect --> bronze --> silver --> gold
+    collect --> bronze --> silver --> gold --> quality
     weather   (independent: a weather API outage never blocks the transit tables)
 
 - collect: polls WMATA for --polls snapshots and writes them straight into the
   landing folder of the raw Volume (the API key comes from a Databricks secret).
 - bronze / silver / gold: the existing pipeline functions.
+- quality: data-quality checks on the dates gold just rebuilt; fails the run on a critical failure.
 
 Every step appends one row to ops_run_log (run id, step, start, end, status,
 metrics as JSON), even when it fails. That table is where the resume metrics
@@ -40,7 +41,7 @@ if str(REPO_ROOT) not in sys.path:
 
 log = logging.getLogger("run_pipeline")
 
-STEPS = ("collect", "bronze", "silver", "gold", "weather")
+STEPS = ("collect", "bronze", "silver", "gold", "quality", "weather")
 FEED_URLS = {
     "vehicle_positions": "https://api.wmata.com/gtfs/bus-gtfsrt-vehiclepositions.pb",
     "trip_updates": "https://api.wmata.com/gtfs/bus-gtfsrt-tripupdates.pb",
@@ -96,6 +97,10 @@ def run_step(spark: SparkSession, step: str, args: argparse.Namespace) -> dict:
         out = build_gold(spark)
         return {"start": str(out["start"]), "end": str(out["end"]), "rows": out["rows"],
                 "freshness_s": gold_freshness_s(spark)}
+    if step == "quality":
+        from pipelines.quality import run_checks
+
+        return run_checks(spark, run_id=args.run_id)
     if step == "weather":
         from pipelines.weather import load_weather
 

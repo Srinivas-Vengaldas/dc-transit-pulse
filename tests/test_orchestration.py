@@ -16,14 +16,16 @@ REPO = "/Workspace/Users/someone/dc-transit-pulse"
 def test_job_runs_steps_in_order_with_retries() -> None:
     s = job_settings(REPO)
     tasks = {t["task_key"]: t for t in s["tasks"]}
-    assert list(tasks) == ["collect", "bronze", "silver", "gold", "weather"]
+    assert list(tasks) == ["collect", "bronze", "silver", "gold", "quality", "weather"]
+    assert tasks["quality"]["depends_on"] == [{"task_key": "gold"}]
+    assert tasks["quality"]["max_retries"] == 0  # a failed check is a data problem; retrying cannot fix it
     assert "depends_on" not in tasks["weather"]  # a weather outage never blocks the transit tables
     assert tasks["silver"]["depends_on"] == [{"task_key": "bronze"}]
     assert tasks["gold"]["depends_on"] == [{"task_key": "silver"}]
     # Bronze still runs if collect fails: files that did land are not left waiting.
     assert tasks["bronze"]["run_if"] == "ALL_DONE"
     for t in tasks.values():
-        assert t["max_retries"] >= 1
+        assert t["max_retries"] >= 1 or t["task_key"] == "quality"
         assert t["spark_python_task"]["python_file"] == f"{REPO}/orchestration/run_pipeline.py"
         assert t["spark_python_task"]["parameters"][:2] == ["--step", t["task_key"]]
     assert s["max_concurrent_runs"] == 1
