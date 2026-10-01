@@ -5,7 +5,7 @@ GTFS-Realtime feeds, Databricks Auto Loader ingests the raw files into a bronze 
 table, and PySpark builds silver and gold layers for reliability analytics
 (on-time performance, delay by route and hour, bus bunching).
 
-> Status: Week 2 of 4, silver layer. Results and metrics will be added only once measured.
+> Status: Week 3 of 4, gold marts and scheduled job. Results and metrics will be added only once measured.
 
 ## Architecture
 
@@ -55,6 +55,30 @@ On Databricks (Git folder + notebook), each module's docstring shows how to call
 | `pipelines/silver_transform.py` | `silver_vehicle_positions`, `silver_trip_updates` (typed, deduped with a watermark and MERGE), `silver_quarantine` (rows that fail checks), plus `reconcile()` |
 | `pipelines/static_silver.py` | `silver_stop_times` with GTFS times as seconds (hours can be >= 24) |
 | `pipelines/dim_scd2.py` | `dim_routes`, `dim_stops` as SCD Type 2, and the view `silver_vehicle_positions_enriched` (point-in-time route join) |
+| `pipelines/gold_marts.py` | `gold_timepoint_departures`, `gold_route_hour_performance` (on-time % and delay), `gold_headways`, `gold_route_hour_bunching` |
+| `pipelines/weather.py` | `silver_weather_hourly` from Open-Meteo, and the view `gold_route_hour_weather` |
+| `pipelines/quality.py` | Data-quality checks on silver and gold, results in `dq_results` |
+
+## Scheduled job
+
+`orchestration/workflow.json` defines one Databricks job of serverless tasks,
+`collect -> bronze -> silver -> gold -> quality`, plus an independent `weather` task, with retries. Every task appends a row to
+`ops_run_log`, which is where events per day and data freshness are measured.
+
+```bash
+set -a; source .env; set +a
+python -m orchestration.create_job --put-secret --run-now
+```
+
+The schedule is created paused; unpause it in the Jobs UI once a manual run succeeds.
+
+### Metric definitions
+
+| Metric | Definition |
+|---|---|
+| Observed departure | Midpoint of the last ping at or before a stop and the first ping past it; graded only if the two pings are at most 120 s apart |
+| On time | From 2 minutes early to 7 minutes late against the scheduled departure, at timepoints |
+| Bunched / gapped | Actual headway below 25% / above 150% of the scheduled gap between the same two trips |
 
 Secrets live only in `.env` (git-ignored) locally and in Databricks secrets in the workspace.
 

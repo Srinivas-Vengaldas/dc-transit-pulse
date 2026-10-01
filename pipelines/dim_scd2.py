@@ -186,7 +186,10 @@ def load_dims(
 
 ENRICHED_VP_VIEW_SQL = """
 CREATE OR REPLACE VIEW {c}.{s}.silver_vehicle_positions_enriched AS
-SELECT vp.*, r.route_sk, r.route_short_name, r.route_long_name
+SELECT vp.*, r.route_sk, r.route_short_name, r.route_long_name,
+       CASE WHEN vp.route_id IS NULL OR trim(vp.route_id) = '' THEN 'not_on_trip'
+            WHEN r.route_sk IS NULL THEN 'unknown_route'
+            ELSE 'matched' END AS route_match
 FROM {c}.{s}.silver_vehicle_positions AS vp
 LEFT JOIN {c}.{s}.dim_routes AS r
   ON vp.route_id = r.route_id
@@ -196,5 +199,11 @@ LEFT JOIN {c}.{s}.dim_routes AS r
 
 
 def create_enriched_view(spark: SparkSession, catalog: str = "workspace", schema: str = "transit") -> None:
-    """Vehicle positions joined to the route version in force on each row's service_date."""
+    """Vehicle positions joined to the route version in force on each row's service_date.
+
+    route_match explains rows without a route: "not_on_trip" is a bus WMATA reports
+    with no trip (deadheading, layover, out of service), which is normal and excluded
+    from route metrics; "unknown_route" would mean the schedule is missing a route
+    and is the case worth alerting on.
+    """
     spark.sql(ENRICHED_VP_VIEW_SQL.format(c=catalog, s=schema))

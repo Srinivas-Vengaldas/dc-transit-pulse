@@ -72,10 +72,11 @@ def test_point_in_time_join_uses_the_version_in_force(spark, db) -> None:
     apply_scd2(spark, release(spark, "V1", d1, {"A1": "Old Name"}), TABLE, SPEC)
     apply_scd2(spark, release(spark, "V2", d2, {"A1": "New Name"}), TABLE, SPEC)
     spark.createDataFrame([("1", "A1", date(2027, 3, 27)), ("2", "A1", date(2027, 3, 28)),
-                           ("3", "Q7", date(2027, 3, 28))],
+                           ("3", "Q7", date(2027, 3, 28)), ("4", None, date(2027, 3, 28))],
                           "vehicle_id string, route_id string, service_date date") \
         .write.format("delta").saveAsTable("spark_catalog.t_dim.silver_vehicle_positions")
     spark.sql(ENRICHED_VP_VIEW_SQL.format(c="spark_catalog", s="t_dim"))
-    got = {r.vehicle_id: r.route_long_name
+    got = {r.vehicle_id: (r.route_long_name, r.route_match)
            for r in spark.table("spark_catalog.t_dim.silver_vehicle_positions_enriched").collect()}
-    assert got == {"1": "Old Name", "2": "New Name", "3": None}
+    assert got == {"1": ("Old Name", "matched"), "2": ("New Name", "matched"), "3": (None, "unknown_route"),
+                   "4": (None, "not_on_trip")}
