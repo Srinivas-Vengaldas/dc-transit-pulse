@@ -42,13 +42,17 @@ def tu(trip_id: str | None, ts: str | None, delay: int | None = 60, n_stops: int
     return {"id": trip_id or "x", "trip_update": trip_update}
 
 
-def bronze_df(spark, feed: str, entities: list[dict], fetched_at: datetime = FETCHED):
-    """A DataFrame shaped like Auto Loader's bronze output (all leaf values are strings)."""
+def bronze_df(spark, feed: str, entities: list[dict], fetched_at: datetime = FETCHED,
+              entity_as_string: bool = False):
+    """A DataFrame shaped like Auto Loader's bronze output (all leaf values are strings).
+
+    entity_as_string=True mimics the shape seen on Databricks, where `entity` is one JSON string.
+    """
     from pyspark.sql import functions as F
 
     header = str(int(fetched_at.timestamp()) - 5)
     lines = [json.dumps({"feed": feed, "feed_header_ts": header, "fetched_at": fetched_at.isoformat(),
-                         "entity": e}) for e in entities]
+                         "entity": json.dumps(e) if entity_as_string else e}) for e in entities]
     df = spark.read.option("primitivesAsString", "true").json(spark.sparkContext.parallelize(lines))
     return (df.withColumn("_source_file", F.lit(f"/landing/{feed}/{feed}_{header}.jsonl"))
             .withColumn("_ingested_at", F.current_timestamp()))
@@ -97,6 +101,20 @@ def test_vehicle_positions_are_typed(spark) -> None:
     # 00:30 Eastern on Oct 1, but the trip started on the Sep 30 service day.
     assert row.service_date == date(2026, 9, 30)
     assert row._dq_reason is None
+
+
+def test_entity_stored_as_json_string_is_parsed(spark) -> None:
+    trip = {"trip_id": "T1", "route_id": "A1", "direction_id": 1, "start_date": "20260930"}
+    vps = bronze_df(spark, "vehicle_positions", [vp("100", epoch(2026, 10, 1, 4, 30), trip=trip)],
+                    entity_as_string=True)
+    assert dict(vps.dtypes)["entity"] == "string"
+    row = FEEDS["vehicle_positions"].parse(vps).first()
+    assert (row.vehicle_id, row.route_id, row.direction_id, row._dq_reason) == ("100", "A1", 1, None)
+    assert row.latitude == pytest.approx(38.9)
+    tus = bronze_df(spark, "trip_updates", [tu("T1", epoch(2026, 10, 1, 4, 30), delay=-45, n_stops=3)],
+                    entity_as_string=True)
+    row = FEEDS["trip_updates"].parse(tus).first()
+    assert (row.trip_id, row.delay_s, row.n_stop_time_updates, row._dq_reason) == ("T1", -45, 3, None)
 
 
 def test_service_date_without_trip_is_the_eastern_calendar_date(spark) -> None:

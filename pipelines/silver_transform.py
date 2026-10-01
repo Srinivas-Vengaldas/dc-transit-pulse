@@ -112,11 +112,47 @@ def service_date(trip_start_date: Column, event_ts: Column) -> Column:
 
 # --------------------------------------------------------------------------- parsing
 
+# GTFS-RT entity shapes as bronze holds them (protobuf -> JSON, every leaf kept as a string).
+# Used when Auto Loader stored `entity` as a JSON string instead of a struct.
+_TRIP = ("struct<trip_id:string,route_id:string,direction_id:string,start_time:string,"
+         "start_date:string,schedule_relationship:string>")
+_VEHICLE_DESC = "struct<id:string,label:string,license_plate:string>"
+_STE = "struct<delay:string,time:string,uncertainty:string>"
+VP_ENTITY_SCHEMA = (
+    f"struct<id:string,vehicle:struct<trip:{_TRIP},vehicle:{_VEHICLE_DESC},"
+    "position:struct<latitude:string,longitude:string,bearing:string,odometer:string,speed:string>,"
+    "current_stop_sequence:string,stop_id:string,current_status:string,timestamp:string,"
+    "congestion_level:string,occupancy_status:string>>"
+)
+TU_ENTITY_SCHEMA = (
+    f"struct<id:string,trip_update:struct<trip:{_TRIP},vehicle:{_VEHICLE_DESC},"
+    f"stop_time_update:array<struct<stop_sequence:string,stop_id:string,arrival:{_STE},"
+    f"departure:{_STE},schedule_relationship:string>>,timestamp:string,delay:string>>"
+)
+
+
+def with_entity_struct(bronze: DataFrame, entity_schema: str) -> DataFrame:
+    """Make sure `entity` is a struct.
+
+    With inferColumnTypes=false, Auto Loader can store a nested JSON object as
+    one JSON string. Parsing it here with an explicit schema means silver works
+    for either bronze shape; numbers in the JSON are read into the string fields
+    as their text, so nothing is lost before the casts below.
+    """
+    from pyspark.sql import functions as F
+    from pyspark.sql.types import StringType
+
+    if isinstance(bronze.schema["entity"].dataType, StringType):
+        return bronze.withColumn("entity", F.from_json("entity", entity_schema))
+    return bronze
+
+
 
 def parse_vehicle_positions(bronze: DataFrame) -> DataFrame:
     """Flatten and type bronze vehicle positions. Adds `_dq_reason` (NULL = valid row)."""
     from pyspark.sql import functions as F
 
+    bronze = with_entity_struct(bronze, VP_ENTITY_SCHEMA)
     s = bronze.schema
 
     def f(path: str) -> Column:
@@ -169,6 +205,7 @@ def parse_trip_updates(bronze: DataFrame) -> DataFrame:
     """
     from pyspark.sql import functions as F
 
+    bronze = with_entity_struct(bronze, TU_ENTITY_SCHEMA)
     s = bronze.schema
 
     def f(path: str) -> Column:
