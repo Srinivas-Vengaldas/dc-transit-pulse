@@ -41,8 +41,9 @@ def load(directory: str) -> data.Snapshot | None:
     return data.load_snapshot(Path(directory))
 
 
-def fmt_pct(v: float | None) -> str:
-    return "n/a" if v is None or pd.isna(v) else f"{v:.1f}%"
+def fmt_pct(v: float | str | None) -> str:
+    """Percent with one decimal. Accepts text too: older manifests stored SQL decimals as strings."""
+    return "n/a" if v is None or pd.isna(v) else f"{float(v):.1f}%"
 
 
 def hour_axis(title: str = "Scheduled hour (Eastern)") -> alt.X:

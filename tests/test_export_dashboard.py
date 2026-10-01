@@ -251,4 +251,5 @@ def test_export_writes_csvs_and_manifest(tables, tmp_path: Path) -> None:
     assert manifest["rows"]["route_summary"] == 2
     assert manifest["definitions"]["late_s"] == 420
     assert manifest["metrics"]["data_quality"]["checks"] == 4
+    assert manifest["metrics"]["data_quality"]["pct_checks_passed"] == 75.0  # a JSON number, not "75.00"
     assert not list(tmp_path.glob(".*.tmp"))  # temp files were renamed away

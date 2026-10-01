@@ -30,6 +30,7 @@ import logging
 import os
 from dataclasses import asdict
 from datetime import UTC, datetime
+from decimal import Decimal
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -240,6 +241,11 @@ def build_datasets(
     return out, skipped
 
 
+def json_default(value: object) -> object:
+    """SQL DECIMAL results (round(), percentages) become JSON numbers; anything else (dates) becomes text."""
+    return float(value) if isinstance(value, Decimal) else str(value)
+
+
 def write_atomic(path: Path, text: str) -> None:
     """Write to a temp file beside the target, then rename over it."""
     tmp = path.with_name(f".{path.name}.tmp")
@@ -280,6 +286,6 @@ def export_dashboard(
         "metrics": compute_metrics(spark, catalog, schema) if not skipped else None,
     }
     # The manifest goes last: a reader that sees a new manifest also sees the CSVs it describes.
-    write_atomic(target / "manifest.json", json.dumps(manifest, indent=2, default=str))
+    write_atomic(target / "manifest.json", json.dumps(manifest, indent=2, default=json_default))
     log.info("dashboard snapshot -> %s: %s (skipped %s)", target, rows, skipped)
     return {"rows": rows, "skipped": skipped}
