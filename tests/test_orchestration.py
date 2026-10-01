@@ -8,7 +8,7 @@ from types import SimpleNamespace
 import pytest
 
 from orchestration import run_pipeline
-from orchestration.create_job import WORKFLOW, job_settings, upsert_job
+from orchestration.create_job import WORKFLOW, default_repo_path, job_settings, upsert_job
 
 REPO = "/Workspace/Users/someone/dc-transit-pulse"
 
@@ -82,3 +82,10 @@ def test_collect_sums_polls_and_fails_when_nothing_lands(monkeypatch, tmp_path: 
 def test_parse_args_defaults() -> None:
     a = run_pipeline.parse_args(["--step", "gold"])
     assert (a.step, a.run_id, a.raw_volume) == ("gold", "manual", "/Volumes/workspace/transit/raw")
+
+
+def test_default_repo_path_is_the_users_git_folder() -> None:
+    assert default_repo_path("a@b.edu") == "/Workspace/Users/a@b.edu/dc-transit-pulse"
+    assert job_settings(default_repo_path("a@b.edu"))["tasks"][0]["spark_python_task"]["python_file"] == (
+        "/Workspace/Users/a@b.edu/dc-transit-pulse/orchestration/run_pipeline.py"
+    )

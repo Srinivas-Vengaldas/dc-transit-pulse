@@ -65,7 +65,7 @@ On Databricks (Git folder + notebook), each module's docstring shows how to call
 
 ```bash
 set -a; source .env; set +a
-python -m orchestration.create_job --repo-path /Workspace/Users/<you>/dc-transit-pulse --put-secret --run-now
+python -m orchestration.create_job --put-secret --run-now
 ```
 
 The schedule is created paused; unpause it in the Jobs UI once a manual run succeeds.

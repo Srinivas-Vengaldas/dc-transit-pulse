@@ -5,8 +5,10 @@ DATABRICKS_TOKEN; the SDK reads them from the environment). Idempotent: the job
 is found by name and updated in place, so running this twice never makes two jobs.
 
     set -a; source .env; set +a
-    python -m orchestration.create_job --repo-path /Workspace/Users/<you>/dc-transit-pulse --put-secret
-    python -m orchestration.create_job --repo-path /Workspace/Users/<you>/dc-transit-pulse --run-now
+    python -m orchestration.create_job --put-secret --run-now
+
+--repo-path defaults to /Workspace/Users/<your Databricks user>/dc-transit-pulse, looked up
+from the token, so no email is typed by hand.
 
 --put-secret copies WMATA_API_KEY from your environment into the Databricks
 secret scope the collect task reads, so the key never appears in the job or the repo.
@@ -34,6 +36,11 @@ def job_settings(repo_path: str, workflow: Path = WORKFLOW) -> dict[str, Any]:
     return json.loads(workflow.read_text().replace("{repo}", repo_path.rstrip("/")))
 
 
+def default_repo_path(user_name: str) -> str:
+    """Where Databricks puts a Git folder named dc-transit-pulse in the user's home folder."""
+    return f"/Workspace/Users/{user_name}/dc-transit-pulse"
+
+
 def put_secret(w: Any, scope: str, key: str, value: str) -> None:
     """Create the secret scope if needed and store the value. The value is never logged."""
     if scope not in {s.name for s in w.secrets.list_scopes()}:
@@ -59,8 +66,7 @@ def upsert_job(w: Any, settings: dict[str, Any]) -> int:
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    p.add_argument("--repo-path", required=True,
-                   help="Git folder path, /Workspace/Users/<you>/dc-transit-pulse")
+    p.add_argument("--repo-path", help="Git folder path (default: /Workspace/Users/<you>/dc-transit-pulse)")
     p.add_argument("--put-secret", action="store_true", help="store WMATA_API_KEY in the secret scope")
     p.add_argument("--run-now", action="store_true", help="start one run after creating or updating")
     p.add_argument("--secret-scope", default="transit")
@@ -77,7 +83,8 @@ def main(argv: list[str] | None = None) -> int:
             log.error("WMATA_API_KEY is not set (did you run: set -a; source .env; set +a ?)")
             return 1
         put_secret(w, args.secret_scope, args.secret_key, key)
-    job_id = upsert_job(w, job_settings(args.repo_path))
+    repo_path = args.repo_path or default_repo_path(w.current_user.me().user_name)
+    job_id = upsert_job(w, job_settings(repo_path))
     host = w.config.host.rstrip("/")
     log.info("job page: %s/jobs/%s", host, job_id)
     if args.run_now:
