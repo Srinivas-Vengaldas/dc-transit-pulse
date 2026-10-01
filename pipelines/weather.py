@@ -95,6 +95,11 @@ def parse_hourly(payload: dict[str, Any]) -> list[tuple]:
     return rows
 
 
+def past_hours(rows: list[tuple], now: datetime) -> list[tuple]:
+    """Drop hours that have not happened yet: the API returns forecasts for them, not observed weather."""
+    return [r for r in rows if r[0] <= now]
+
+
 def fetch_window(today_local: date) -> tuple[date, date]:
     """UTC date range covering yesterday and today in Eastern time."""
     return today_local - timedelta(days=1), today_local + timedelta(days=1)
@@ -139,7 +144,7 @@ def load_weather(
     today_local = today_local or datetime.now(LOCAL_TZ).date()
     start, end = fetch_window(today_local)
     with requests.Session() as session:
-        rows = parse_hourly(fetch_hourly(session, start, end))
+        rows = past_hours(parse_hourly(fetch_hourly(session, start, end)), datetime.now(UTC))
     if not rows:
         raise RuntimeError(f"Open-Meteo returned no hourly rows for {start}..{end}")
     table = f"{catalog}.{schema}.silver_weather_hourly"

@@ -5,7 +5,7 @@ from datetime import UTC, date, datetime
 
 import pytest
 
-from pipelines.weather import WEATHER_VIEW_SQL, fetch_window, parse_hourly, upsert_weather
+from pipelines.weather import WEATHER_VIEW_SQL, fetch_window, parse_hourly, past_hours, upsert_weather
 
 
 def payload(times: list[str], precip: list[float | None], temp: float = 20.0) -> dict:
@@ -27,6 +27,13 @@ def test_parse_skips_hours_without_precipitation_and_handles_midnight() -> None:
     rows = parse_hourly(payload(["2026-10-02T02:00", "2026-10-02T03:00"], [0.1, None]))
     assert len(rows) == 1
     assert (rows[0][1], rows[0][2], rows[0][-1]) == (date(2026, 10, 1), 22, True)  # 22:00 the evening before
+
+
+def test_future_forecast_hours_are_dropped() -> None:
+    hours = ["2026-10-01T21:00", "2026-10-01T22:00", "2026-10-01T23:00"]
+    rows = parse_hourly(payload(hours, [0.0, 0.0, 0.0]))
+    kept = past_hours(rows, datetime(2026, 10, 1, 22, 30, tzinfo=UTC))
+    assert [r[0].hour for r in kept] == [21, 22]
 
 
 def test_fetch_window_covers_yesterday_and_today_eastern() -> None:
