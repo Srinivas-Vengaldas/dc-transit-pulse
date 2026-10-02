@@ -129,6 +129,10 @@ to `web` (`web/vercel.json` pins the Vite build, because the repo's Python files
 detected as a Python app), and optionally set `VITE_STREAMLIT_URL` to link the Streamlit app. Every
 push to `main` that updates the snapshot redeploys the site.
 
+`.github/workflows/refresh-snapshot.yml` keeps it current: every night at 03:30 UTC (after the last
+job run) it downloads the published snapshot and commits it if it changed, which redeploys the site.
+It needs repository secrets `DATABRICKS_HOST` and `DATABRICKS_TOKEN`; run it by hand from the Actions tab.
+
 ## Data sources
 
 - WMATA Bus GTFS-Realtime: Vehicle Positions and Trip Updates ([developer.wmata.com](https://developer.wmata.com))
