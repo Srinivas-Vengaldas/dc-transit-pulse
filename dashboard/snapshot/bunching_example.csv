@@ -9,3 +9,4 @@ service_date,route_id,direction_id,stop_id,stop_name,trip_id,vehicle_id,schedule
 2026-10-01,D80,0,7535,Wisconsin Av NW+Cathedral Av NW,22236020,4581,1790898780,1790899451,671,5841.0,5340.0,regular
 2026-10-01,D80,0,7535,Wisconsin Av NW+Cathedral Av NW,26533020,7139,1790899680,1790899480,-200,29.0,900.0,bunched
 2026-10-01,D80,0,7535,Wisconsin Av NW+Cathedral Av NW,18068020,7151,1790899260,1790899482,222,2.0,-420.0,out_of_order
+2026-10-01,D80,0,7535,Wisconsin Av NW+Cathedral Av NW,6673020,7151,1790906580,1790906869,289,7387.0,7320.0,regular
