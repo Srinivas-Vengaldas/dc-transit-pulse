@@ -5,6 +5,8 @@ GTFS-Realtime feeds, Databricks Auto Loader ingests the raw files into a bronze 
 table, and PySpark builds silver and gold layers for reliability analytics
 (on-time performance, delay by route and hour, bus bunching).
 
+**Live site: https://dc-transit-pulse-eta.vercel.app**
+
 > Status: Week 4 of 4, dashboard and optimization. Results and metrics will be added only once measured.
 
 ## Architecture
@@ -123,7 +125,8 @@ npm test && npm run build
 ```
 
 Deploy on [Vercel](https://vercel.com) (Hobby plan, free): import the GitHub repo, set **Root Directory**
-to `web` (Vite is detected), and optionally set `VITE_STREAMLIT_URL` to link the Streamlit app. Every
+to `web` (`web/vercel.json` pins the Vite build, because the repo's Python files would otherwise be
+detected as a Python app), and optionally set `VITE_STREAMLIT_URL` to link the Streamlit app. Every
 push to `main` that updates the snapshot redeploys the site.
 
 ## Data sources
