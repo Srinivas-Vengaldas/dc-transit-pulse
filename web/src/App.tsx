@@ -84,7 +84,9 @@ function Page({ snap }: { snap: Snapshot }) {
               <Kpi label="Departures on time" value={fmtPct(k.pctOnTime)}
                    sub={`${earlyMin} min early to ${lateMin} min late, at timepoints`} />
               <Kpi label="On time at weekday rush hour" value={fmtPct(k.rushPctOnTime)}
-                   sub={`vs ${fmtPct(k.restPctOnTime)} other hours`} />
+                   sub={k.restPctOnTime == null
+                     ? "weekdays 6-9 am and 4-7 pm"
+                     : `vs ${fmtPct(k.restPctOnTime)} other hours`} />
               <Kpi label="Gaps where buses bunched" value={fmtPct(k.pctBunched)}
                    sub="next bus under 25% of the scheduled gap" />
               <Kpi label="Average delay" value={k.avgDelayMin == null ? "n/a" : `${k.avgDelayMin > 0 ? "+" : ""}${k.avgDelayMin} min`}
