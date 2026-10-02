@@ -287,3 +287,10 @@ export function localTime(epoch: number): string {
   return new Intl.DateTimeFormat("en-US", { timeZone: LOCAL_TZ, hour: "2-digit", minute: "2-digit",
                                             hourCycle: "h23" }).format(new Date(epoch * 1000));
 }
+
+const INT_FORMAT = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 });
+
+/** "174,452": US digit grouping whatever the viewer's locale, so numbers read the same everywhere. */
+export function fmtInt(n: number): string {
+  return INT_FORMAT.format(n);
+}

@@ -11,7 +11,7 @@ import {
   YAxis,
 } from "recharts";
 
-import type { HourPoint, RouteRow, WeatherBar } from "../data";
+import { fmtInt, type HourPoint, type RouteRow, type WeatherBar } from "../data";
 
 const AXIS = { stroke: "var(--axis)", tick: { fill: "var(--muted)", fontSize: 12 } };
 
@@ -53,7 +53,7 @@ export function WorstRoutes({ rows }: { rows: RouteRow[] }) {
           return (
             <div className="tt">
               <div><b>{r.label}</b></div>
-              <div><span className="k">On time </span>{r.pctOnTime}% of {r.departures.toLocaleString()} departures</div>
+              <div><span className="k">On time </span>{r.pctOnTime}% of {fmtInt(r.departures)} departures</div>
               <div><span className="k">At rush hour </span>{r.rushPctOnTime ?? "n/a"}{r.rushPctOnTime != null && "%"}</div>
               <div><span className="k">Bunched gaps </span>{r.pctBunched ?? "n/a"}{r.pctBunched != null && "%"}</div>
               <div><span className="k">Avg delay </span>{(r.avg_delay_s / 60).toFixed(1)} min</div>
@@ -129,9 +129,9 @@ export function RainBars({ rows }: { rows: WeatherBar[] }) {
               <div className="tt">
                 <div><b>{r.period}</b></div>
                 <div><span className="k">Dry </span>{r.dry ?? "n/a"}{r.dry != null && "%"} on time
-                  ({r.dryHours} h, {r.dryDepartures.toLocaleString()} departures)</div>
+                  ({r.dryHours} h, {fmtInt(r.dryDepartures)} departures)</div>
                 <div><span className="k">Wet </span>{r.wet ?? "n/a"}{r.wet != null && "%"} on time
-                  ({r.wetHours} h, {r.wetDepartures.toLocaleString()} departures)</div>
+                  ({r.wetHours} h, {fmtInt(r.wetDepartures)} departures)</div>
               </div>
             );
           }} />
@@ -161,7 +161,7 @@ export function EventsPerDay({ rows }: { rows: { date: string; events: number }[
         <Tooltip cursor={{ fill: "var(--surface-2)" }} content={({ active, payload }) => {
           const r = payload?.[0]?.payload as { date: string; events: number } | undefined;
           if (!active || !r) return null;
-          return <div className="tt"><b>{r.date}</b><div>{r.events.toLocaleString()} events</div></div>;
+          return <div className="tt"><b>{r.date}</b><div>{fmtInt(r.events)} events</div></div>;
         }} />
         <Bar dataKey="events" fill="var(--series-1)" radius={[4, 4, 0, 0]} isAnimationActive={false} />
       </BarChart>

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   eventsPerDay,
+  fmtInt,
   hourProfile,
   kpis,
   localTime,
@@ -98,5 +99,12 @@ describe("pipeline helpers", () => {
   });
   it("formats Eastern time", () => {
     expect(localTime(1790000000)).toBe("10:13"); // 14:13 UTC = 10:13 EDT
+  });
+});
+
+describe("fmtInt", () => {
+  it("uses US grouping regardless of locale", () => {
+    expect(fmtInt(174452)).toBe("174,452");
+    expect(fmtInt(1507)).toBe("1,507");
   });
 });

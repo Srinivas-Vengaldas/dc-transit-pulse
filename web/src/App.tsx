@@ -5,6 +5,7 @@ import { EventsPerDay, HourLines, RainBars, WorstRoutes } from "./components/Cha
 import { StopMap } from "./components/StopMap";
 import {
   DEFAULT_RUSH,
+  fmtInt,
   eventsPerDay,
   hourProfile,
   kpis,
@@ -90,7 +91,7 @@ function Page({ snap }: { snap: Snapshot }) {
               <Kpi label="Gaps where buses bunched" value={fmtPct(k.pctBunched)}
                    sub="next bus under 25% of the scheduled gap" />
               <Kpi label="Average delay" value={k.avgDelayMin == null ? "n/a" : `${k.avgDelayMin > 0 ? "+" : ""}${k.avgDelayMin} min`}
-                   sub={`${k.departures.toLocaleString()} graded departures`} />
+                   sub={`${fmtInt(k.departures)} graded departures`} />
             </div>
           )}
           <p className="note" style={{ marginTop: 16 }}>
@@ -248,7 +249,7 @@ function Page({ snap }: { snap: Snapshot }) {
           </div>
 
           <div className="kpis">
-            <Kpi label="Events per day" value={m.avg_events_per_full_day ? m.avg_events_per_full_day.toLocaleString() : "n/a"}
+            <Kpi label="Events per day" value={m.avg_events_per_full_day ? fmtInt(m.avg_events_per_full_day) : "n/a"}
                  sub={`${m.days_logged ?? 0} day(s) logged`} />
             <Kpi label="Median freshness" value={num(m.freshness?.median_s) ? `${(num(m.freshness?.median_s)! / 60).toFixed(1)} min` : "n/a"}
                  sub="newest departure to gold build" />
