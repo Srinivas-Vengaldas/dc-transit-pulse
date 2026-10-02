@@ -1,0 +1,13 @@
+check_name,table_name,severity,runs,passed,rows_failed,rows_checked
+dep_error_bounded,gold_timepoint_departures,critical,8,8,0,13930
+dep_key_unique,gold_timepoint_departures,critical,8,8,0,13930
+dep_status_valid,gold_timepoint_departures,critical,8,8,0,13930
+headway_non_negative,gold_headways,critical,8,8,0,6375
+perf_counts_add_up,gold_route_hour_performance,critical,8,8,0,3887
+perf_pct_in_range,gold_route_hour_performance,critical,8,8,0,3887
+tu_key_unique,silver_trip_updates,critical,8,8,0,950590
+vp_key_unique,silver_vehicle_positions,critical,8,8,0,381926
+vp_vehicle_id_present,silver_vehicle_positions,critical,8,8,0,381926
+dep_delay_plausible,gold_timepoint_departures,warning,8,8,0,13930
+tu_delay_plausible,silver_trip_updates,warning,8,8,0,950590
+vp_in_dc_region,silver_vehicle_positions,warning,8,8,0,381926

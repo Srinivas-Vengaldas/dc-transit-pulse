@@ -1,0 +1,50 @@
+name: Refresh dashboard snapshot
+
+# Copies the snapshot the Databricks job's `export` task published (only after its
+# quality checks pass) into dashboard/snapshot/ and commits it when it changed.
+# The push makes Vercel rebuild the showcase site with the new numbers.
+#
+# Needs repository secrets DATABRICKS_HOST and DATABRICKS_TOKEN.
+# Scheduled runs only fire for workflows on the default branch.
+
+on:
+  schedule:
+    # 03:30 UTC = 23:30 EDT / 22:30 EST, after the last scheduled job run (22:00 ET).
+    - cron: "30 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-snapshot
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: pip install "databricks-sdk>=0.40" "pandas>=2.1"
+      - name: Download snapshot from the Volume
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        run: python -m dashboard.fetch_snapshot
+      - name: Commit if changed
+        run: |
+          if git diff --quiet -- dashboard/snapshot && [ -z "$(git ls-files --others --exclude-standard dashboard/snapshot)" ]; then
+            echo "Snapshot unchanged, nothing to commit."
+            exit 0
+          fi
+          generated=$(python -c "import json; print(json.load(open('dashboard/snapshot/manifest.json'))['generated_at_utc'])")
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dashboard/snapshot
+          git commit -m "Refresh dashboard snapshot ($generated UTC)"
+          git push
