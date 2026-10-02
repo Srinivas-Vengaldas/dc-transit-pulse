@@ -98,6 +98,14 @@ nav.toc a:hover { color: var(--ink); }
 section { padding: 48px 0; border-bottom: 1px solid var(--border); }
 section > .wrap > p { color: var(--ink-2); max-width: 760px; }
 
+.takeaway {
+  margin-top: 28px; padding: 16px 20px; border-left: 3px solid var(--accent); background: var(--surface);
+  border-radius: 0 12px 12px 0; max-width: 820px; box-shadow: var(--shadow);
+}
+.takeaway .label { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.takeaway p { margin: 6px 0 0; font-size: 17px; color: var(--ink); }
+.static-summary { max-width: 760px; margin: 64px auto; padding: 0 16px; font-family: system-ui, sans-serif; }
+
 .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 32px; }
 .kpi {
   background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px;

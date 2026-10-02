@@ -294,3 +294,33 @@ const INT_FORMAT = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 });
 export function fmtInt(n: number): string {
   return INT_FORMAT.format(n);
 }
+
+/**
+ * The page's takeaway in plain sentences, from the same counts as the KPI tiles.
+ * Used on the page and baked into index.html at build time (meta description and a
+ * static summary), so link previews and readers without JavaScript get it too.
+ */
+export function headline(rows: RouteHour[], summary: RouteSummary[], rush: number[]): string[] {
+  const k = kpis(rows, rush);
+  if (!k || k.pctOnTime == null) return [];
+  const out = [`${k.pctOnTime}% of ${fmtInt(k.departures)} graded Metrobus departures left on time.`];
+  if (k.rushPctOnTime != null && k.restPctOnTime != null && Math.abs(k.rushPctOnTime - k.restPctOnTime) >= 1) {
+    const worse = k.rushPctOnTime < k.restPctOnTime;
+    out.push(
+      `Weekday rush hour is ${worse ? "worse" : "better"}: ${k.rushPctOnTime}% on time, ` +
+        `vs ${k.restPctOnTime}% at other hours.`,
+    );
+  }
+  if (k.pctBunched != null) {
+    out.push(`${k.pctBunched}% of gaps between buses were bunched, the next bus arriving within a quarter of the scheduled gap.`);
+  }
+  const min = pickMinDepartures(summary);
+  const worst = routeTable(summary, min)[0];
+  if (worst) {
+    out.push(
+      `The least reliable route with at least ${min} departures, ${worst.label}, was on time ` +
+        `${worst.pctOnTime}% of the time.`,
+    );
+  }
+  return out;
+}

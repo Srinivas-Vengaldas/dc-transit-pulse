@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  DEFAULT_RUSH,
   eventsPerDay,
   fmtInt,
+  headline,
   hourProfile,
   kpis,
   localTime,
@@ -106,5 +108,29 @@ describe("fmtInt", () => {
   it("uses US grouping regardless of locale", () => {
     expect(fmtInt(174452)).toBe("174,452");
     expect(fmtInt(1507)).toBe("1,507");
+  });
+});
+
+describe("headline", () => {
+  const hour = (day_type: "weekday" | "weekend", hour_local: number, departures: number, on_time: number) =>
+    ({ route_id: "A1", day_type, hour_local, departures, on_time, late: 0, early: 0, delay_s_sum: 0,
+       headways: 10, bunched: 1, gapped: 0 }) as RouteHour;
+  const route = (route_id: string, departures: number, on_time: number) =>
+    ({ route_id, route_short_name: route_id, route_long_name: null, departures, on_time, late: 0,
+       avg_delay_s: 0, p90_delay_s: 0, rush_departures: 0, rush_on_time: 0, headways: 0, bunched: 0 }) as RouteSummary;
+
+  it("states on-time, the rush gap, bunching and the worst route from counts", () => {
+    const rows = [hour("weekday", 7, 100, 60), hour("weekday", 12, 100, 80)];
+    const lines = headline(rows, [route("A1", 120, 60), route("B2", 120, 100)], DEFAULT_RUSH);
+    expect(lines[0]).toBe("70% of 200 graded Metrobus departures left on time.");
+    expect(lines[1]).toBe("Weekday rush hour is worse: 60% on time, vs 80% at other hours.");
+    expect(lines[2]).toMatch(/^10% of gaps/);
+    expect(lines[3]).toContain("A1, was on time 50%");
+  });
+
+  it("leaves out a comparison it cannot make", () => {
+    const lines = headline([hour("weekday", 7, 10, 5)], [], DEFAULT_RUSH);
+    expect(lines.join(" ")).not.toContain("rush hour");
+    expect(headline([], [], DEFAULT_RUSH)).toEqual([]);
   });
 });

@@ -6,6 +6,7 @@ import { StopMap } from "./components/StopMap";
 import {
   DEFAULT_RUSH,
   fmtInt,
+  headline,
   eventsPerDay,
   hourProfile,
   kpis,
@@ -57,6 +58,7 @@ function Page({ snap }: { snap: Snapshot }) {
   const defs = snap.manifest.definitions ?? {};
   const rush = defs.rush_hours ?? DEFAULT_RUSH;
   const k = useMemo(() => kpis(snap.routeHour, rush), [snap, rush]);
+  const takeaway = useMemo(() => headline(snap.routeHour, snap.routeSummary, rush), [snap, rush]);
   const minDep = useMemo(() => pickMinDepartures(snap.routeSummary), [snap]);
   const routes = useMemo(() => routeTable(snap.routeSummary, minDep), [snap, minDep]);
   const [routeId, setRouteId] = useState<string | undefined>(undefined);
@@ -80,6 +82,12 @@ function Page({ snap }: { snap: Snapshot }) {
             ingests WMATA's live bus feeds every 30 seconds and measures every bus against the timetable in force
             that day.
           </p>
+          {takeaway.length > 0 && (
+            <div className="takeaway">
+              <div className="label">What the data shows</div>
+              <p>{takeaway.join(" ")}</p>
+            </div>
+          )}
           {k && (
             <div className="kpis">
               <Kpi label="Departures on time" value={fmtPct(k.pctOnTime)}
