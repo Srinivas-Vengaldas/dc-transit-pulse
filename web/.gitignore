@@ -1,0 +1,5 @@
+node_modules/
+dist/
+# Copied from ../dashboard/snapshot at build time; the snapshot itself is committed there.
+public/data/
+*.tsbuildinfo

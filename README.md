@@ -23,6 +23,7 @@ WMATA GTFS static (zip) -----------------> static Delta tables (SCD Type 2 by fe
 | `producer/` | Polls GTFS-RT feeds and writes raw snapshots to the landing zone |
 | `pipelines/` | Databricks jobs: static load, bronze ingest, silver, gold |
 | `dashboard/` | Streamlit app that reads the exported gold snapshot |
+| `web/` | React showcase site (Vite, static) built from the same snapshot, for Vercel |
 | `orchestration/` | The Databricks job as code and the step runner |
 | `tests/` | pytest unit tests for transformations |
 | `exploration/` | One-off scripts used to understand the feeds before designing schemas |
@@ -107,6 +108,23 @@ streamlit run dashboard/app.py
 
 To publish it, commit `dashboard/snapshot/` and deploy `dashboard/app.py` on
 [Streamlit Community Cloud](https://streamlit.io/cloud) (free, public URL).
+
+### Showcase site (React, Vercel)
+
+`web/` is a one-page static site (React + TypeScript, Recharts, Leaflet) that tells the same story for
+someone who will not open a notebook. At build time it copies `dashboard/snapshot/` into the bundle, so
+it is plain HTML, JS and CSV: free to host, no backend, no credentials.
+
+```bash
+cd web
+npm install
+npm run dev          # http://localhost:5173
+npm test && npm run build
+```
+
+Deploy on [Vercel](https://vercel.com) (Hobby plan, free): import the GitHub repo, set **Root Directory**
+to `web` (Vite is detected), and optionally set `VITE_STREAMLIT_URL` to link the Streamlit app. Every
+push to `main` that updates the snapshot redeploys the site.
 
 ## Data sources
 
