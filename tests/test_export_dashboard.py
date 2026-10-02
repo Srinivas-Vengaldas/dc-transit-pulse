@@ -10,7 +10,14 @@ import pytest
 
 from orchestration.run_pipeline import RUN_LOG_SCHEMA
 from pipelines.export_dashboard import DATASET_QUERIES, DATASET_SOURCES, build_datasets, export_dashboard
-from pipelines.metrics import METRIC_QUERIES, compute_metrics, metric_sql
+from pipelines.metrics import (
+    MEASUREMENT_WINDOW,
+    METRIC_QUERIES,
+    compute_metrics,
+    metric_sql,
+    queries_file,
+    save_metrics,
+)
 from pipelines.quality import RESULTS_SCHEMA
 
 DB = "t_dash"
@@ -162,11 +169,13 @@ def tables(spark):
         ],
         RESULTS_SCHEMA,
     )
-    save(spark, "bronze_vehicle_positions", [(i,) for i in range(10)], "x int")
-    save(spark, "silver_vehicle_positions", [(i,) for i in range(8)], "x int")
-    save(spark, "bronze_trip_updates", [(i,) for i in range(4)], "x int")
-    save(spark, "silver_trip_updates", [(i,) for i in range(4)], "x int")
-    save(spark, "silver_quarantine", [("vehicle_positions",)], "feed string")
+    # D1: 10 positions in, 8 kept, 1 quarantined, 1 removed. D2: 3 in, 3 kept.
+    t1, t2 = at(D1, 14, 1), at(D2, 14, 1)
+    save(spark, "bronze_vehicle_positions", [(t1,)] * 10 + [(t2,)] * 3, "_ingested_at timestamp")
+    save(spark, "silver_vehicle_positions", [(t1,)] * 8 + [(t2,)] * 3, "_ingested_at timestamp")
+    save(spark, "bronze_trip_updates", [(t1,)] * 4, "_ingested_at timestamp")
+    save(spark, "silver_trip_updates", [(t1,)] * 4, "_ingested_at timestamp")
+    save(spark, "silver_quarantine", [("vehicle_positions", t1)], "feed string, _quarantined_at timestamp")
     return spark
 
 
@@ -190,8 +199,9 @@ def test_compute_metrics(tables) -> None:
     assert m["avg_events_per_full_day"] == round((315 + 2) / 2)  # fewer than 3 days: every day counts
     assert m["freshness"]["builds"] == 2  # scheduled runs only: the manual rebuild is not a sample
     assert m["freshness"]["median_s"] == pytest.approx(400.0)
+    assert m["window"] is None
     assert m["rows_removed"]["vehicle_positions"]["removed"] == 1
-    assert m["rows_removed"]["vehicle_positions"]["pct_removed"] == pytest.approx(10.0)
+    assert float(m["rows_removed"]["vehicle_positions"]["pct_removed"]) == pytest.approx(7.69)
     assert m["rows_removed"]["trip_updates"]["removed"] == 0
     assert m["data_quality"] == {
         "runs": 2,
@@ -203,6 +213,43 @@ def test_compute_metrics(tables) -> None:
     # r1 and r2 succeeded (r2's bronze retry succeeded last); r3's gold failed. "manual" is not a job run.
     assert m["job_runs"]["runs"] == 3 and m["job_runs"]["succeeded"] == 2
     assert m["step_runtime"]["bronze"]["failed"] == 1
+    # D1 had 2 of 9 scheduled runs; D2 had 1, and it failed at gold.
+    assert (m["run_coverage"]["days"], m["run_coverage"]["missing_runs"]) == (2, 7 + 8)
+    assert m["run_coverage"]["failed_runs"] == 1
+    assert m["run_coverage"]["per_day"][0]["start_hours"] == [10, 12]  # 14:00 and 16:00 UTC in Eastern
+
+
+def test_compute_metrics_window(tables) -> None:
+    day = D1.isoformat()
+    m = compute_metrics(tables, day, day, catalog="spark_catalog", schema=DB)
+    assert m["window"] == {"start": day, "end": day}
+    assert (m["days_logged"], m["total_events"], m["avg_events_per_full_day"]) == (1, 315, 315)
+    assert m["freshness"]["builds"] == 2
+    assert m["freshness"]["p95_s"] == pytest.approx(490.0)  # [300, 500] at the 95th percentile
+    assert m["rows_removed"]["vehicle_positions"]["bronze"] == 10  # D2's rows are outside the window
+    assert float(m["rows_removed"]["vehicle_positions"]["pct_removed"]) == pytest.approx(10.0)
+    assert (m["job_runs"]["runs"], m["job_runs"]["succeeded"]) == (2, 2)
+    assert (m["run_coverage"]["missing_runs"], m["run_coverage"]["failed_runs"]) == (7, 0)
+
+
+def test_save_metrics_appends_a_dated_record(tables) -> None:
+    m = compute_metrics(tables, D1.isoformat(), D1.isoformat(), catalog="spark_catalog", schema=DB)
+    save_metrics(tables, m, catalog="spark_catalog", schema=DB)
+    row = tables.table(f"spark_catalog.{DB}.ops_metric_results").first()
+    assert (row["window_start"], row["window_end"]) == (D1.isoformat(), D1.isoformat())
+    assert json.loads(row["metrics"])["total_events"] == 315
+
+
+def test_metric_sql_rejects_a_bad_window() -> None:
+    with pytest.raises(ValueError):
+        metric_sql("freshness", start="2026-10-02' OR '1'='1", end="2026-10-08")
+
+
+def test_queries_file_matches_committed_copy() -> None:
+    committed = Path(__file__).resolve().parents[1] / "benchmarks" / "queries.sql"
+    assert committed.read_text() == queries_file(*MEASUREMENT_WINDOW), (
+        "benchmarks/queries.sql is stale: run `python -m pipelines.metrics > benchmarks/queries.sql`"
+    )
 
 
 def test_build_datasets(tables) -> None:

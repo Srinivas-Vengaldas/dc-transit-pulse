@@ -283,7 +283,7 @@ def export_dashboard(
         "rows": rows,
         "skipped": skipped,
         "definitions": {**asdict(DEFAULT_CONFIG), "rush_hours": list(RUSH_HOURS)},
-        "metrics": compute_metrics(spark, catalog, schema) if not skipped else None,
+        "metrics": compute_metrics(spark, catalog=catalog, schema=schema) if not skipped else None,
     }
     # The manifest goes last: a reader that sees a new manifest also sees the CSVs it describes.
     write_atomic(target / "manifest.json", json.dumps(manifest, indent=2, default=json_default))
