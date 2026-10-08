@@ -1,18 +1,18 @@
 {
-  "generated_at_utc": "2026-10-06T16:17:19+00:00",
-  "run_id": "556877392190082",
+  "generated_at_utc": "2026-10-08T21:33:41+00:00",
+  "run_id": "374057859096049",
   "service_dates": {
     "first_service_date": "2026-09-28",
-    "last_service_date": "2026-10-06"
+    "last_service_date": "2026-10-08"
   },
   "rows": {
     "route_summary": 126,
     "route_hour": 3366,
-    "daily": 7,
-    "stops": 1053,
+    "daily": 8,
+    "stops": 1059,
     "weather": 3,
     "bunching_example": 11,
-    "pipeline_runs": 303,
+    "pipeline_runs": 310,
     "dq_checks": 12
   },
   "skipped": [],
@@ -32,95 +32,95 @@
     ]
   },
   "metrics": {
-    "days_logged": 6,
-    "avg_events_per_full_day": 358535,
-    "total_events": 1824160,
+    "days_logged": 7,
+    "avg_events_per_full_day": 321965,
+    "total_events": 1885435,
     "freshness": {
-      "builds": 44,
+      "builds": 45,
       "median_s": 364.0,
-      "p90_s": 419.1,
+      "p90_s": 420.0,
       "max_s": 429
     },
     "rows_removed": {
       "vehicle_positions": {
         "feed": "vehicle_positions",
-        "bronze": 646261,
-        "silver": 608786,
+        "bronze": 666857,
+        "silver": 628446,
         "quarantined": 0,
-        "removed": 37475,
-        "pct_removed": "5.80"
+        "removed": 38411,
+        "pct_removed": "5.76"
       },
       "trip_updates": {
         "feed": "trip_updates",
-        "bronze": 1189505,
-        "silver": 1158413,
+        "bronze": 1230184,
+        "silver": 1198106,
         "quarantined": 0,
-        "removed": 31092,
+        "removed": 32078,
         "pct_removed": "2.61"
       }
     },
     "data_quality": {
-      "runs": 43,
-      "checks": 516,
-      "passed": 516,
+      "runs": 44,
+      "checks": 528,
+      "passed": 528,
       "pct_checks_passed": "100.00",
-      "runs_all_passed": 43
+      "runs_all_passed": 44
     },
     "job_runs": {
-      "runs": 44,
-      "succeeded": 44,
+      "runs": 45,
+      "succeeded": 45,
       "pct_succeeded": "100.00",
       "first_run": "2026-10-01 21:48:17.335865",
-      "last_run": "2026-10-06 16:00:33.010444"
+      "last_run": "2026-10-08 21:16:06.308180"
     },
     "step_runtime": {
       "bronze": {
         "step": "bronze",
-        "attempts": 44,
+        "attempts": 45,
         "failed": 0,
         "median_s": 36.0,
-        "max_s": 39
+        "max_s": 42
       },
       "collect": {
         "step": "collect",
-        "attempts": 44,
+        "attempts": 45,
         "failed": 0,
         "median_s": 573.0,
         "max_s": 574
       },
       "export": {
         "step": "export",
-        "attempts": 41,
+        "attempts": 42,
         "failed": 0,
         "median_s": 33.0,
         "max_s": 36
       },
       "gold": {
         "step": "gold",
-        "attempts": 44,
+        "attempts": 45,
         "failed": 0,
         "median_s": 33.0,
         "max_s": 38
       },
       "quality": {
         "step": "quality",
-        "attempts": 43,
+        "attempts": 44,
         "failed": 0,
         "median_s": 16.0,
         "max_s": 20
       },
       "silver": {
         "step": "silver",
-        "attempts": 44,
+        "attempts": 45,
         "failed": 0,
-        "median_s": 210.5,
+        "median_s": 211.0,
         "max_s": 274
       },
       "weather": {
         "step": "weather",
-        "attempts": 43,
+        "attempts": 44,
         "failed": 0,
-        "median_s": 59.0,
+        "median_s": 58.5,
         "max_s": 66
       }
     }
