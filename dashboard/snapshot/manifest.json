@@ -1,128 +1,279 @@
-{
-  "generated_at_utc": "2026-10-02T18:17:02+00:00",
-  "run_id": "432623132780729",
-  "service_dates": {
-    "first_service_date": "2026-09-28",
-    "last_service_date": "2026-10-02"
-  },
-  "rows": {
-    "route_summary": 126,
-    "route_hour": 1524,
-    "daily": 3,
-    "stops": 987,
-    "weather": 2,
-    "bunching_example": 11,
-    "pipeline_runs": 58,
-    "dq_checks": 12
-  },
-  "skipped": [],
-  "definitions": {
-    "early_s": 120,
-    "late_s": 420,
-    "max_gap_s": 120,
-    "bunched_ratio": 0.25,
-    "gapped_ratio": 1.5,
-    "rush_hours": [
-      6,
-      7,
-      8,
-      16,
-      17,
-      18
-    ]
-  },
-  "metrics": {
-    "days_logged": 2,
-    "avg_events_per_full_day": 226514,
-    "total_events": 453027,
-    "freshness": {
-      "builds": 9,
-      "median_s": 330.0,
-      "p90_s": 375.8,
-      "max_s": 395
-    },
-    "rows_removed": {
-      "vehicle_positions": {
-        "feed": "vehicle_positions",
-        "bronze": 153649,
-        "silver": 145175,
-        "quarantined": 0,
-        "removed": 8474,
-        "pct_removed": "5.52"
-      },
-      "trip_updates": {
-        "feed": "trip_updates",
-        "bronze": 310984,
-        "silver": 304668,
-        "quarantined": 0,
-        "removed": 6316,
-        "pct_removed": "2.03"
-      }
-    },
-    "data_quality": {
-      "runs": 8,
-      "checks": 96,
-      "passed": 96,
-      "pct_checks_passed": "100.00",
-      "runs_all_passed": 8
-    },
-    "job_runs": {
-      "runs": 9,
-      "succeeded": 9,
-      "pct_succeeded": "100.00",
-      "first_run": "2026-10-01 21:48:17.335865",
-      "last_run": "2026-10-02 18:00:36.528152"
-    },
-    "step_runtime": {
-      "bronze": {
-        "step": "bronze",
-        "attempts": 9,
-        "failed": 0,
-        "median_s": 35.0,
-        "max_s": 38
-      },
-      "collect": {
-        "step": "collect",
-        "attempts": 9,
-        "failed": 0,
-        "median_s": 573.0,
-        "max_s": 574
-      },
-      "export": {
-        "step": "export",
-        "attempts": 6,
-        "failed": 0,
-        "median_s": 33.5,
-        "max_s": 35
-      },
-      "gold": {
-        "step": "gold",
-        "attempts": 9,
-        "failed": 0,
-        "median_s": 30.0,
-        "max_s": 33
-      },
-      "quality": {
-        "step": "quality",
-        "attempts": 8,
-        "failed": 0,
-        "median_s": 16.0,
-        "max_s": 18
-      },
-      "silver": {
-        "step": "silver",
-        "attempts": 9,
-        "failed": 0,
-        "median_s": 185.0,
-        "max_s": 247
-      },
-      "weather": {
-        "step": "weather",
-        "attempts": 8,
-        "failed": 0,
-        "median_s": 59.5,
-        "max_s": 65
-      }
-    }
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Language" content="en">
+  <title>Databricks - Sign In</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" type="image/png" href="https://ui-assets.cloud.databricks.com/favicon.ico">
+  <meta http-equiv="content-type" content="text/html; charset=UTF8">
+  <script id="__databricks_react_script"></script>
+  <script type="application/json" id="databricks-safe-flags">{"databricks.fe.fsp.uiFlagsLoginUiRoutes":"[\"/oauth-prompt/select-warehouse\",\"/oauth-prompt/app-consent\",\"/oauth-prompt/select-group\"]","databricks.fe.infra.enableSoftNavUiFlagsGate":true,"databricks.sisu.recaptcha.accounts.isEnabled":true,"databricks.fe.infra.enableBulletTrainCrossAppHardNav":true,"databricks.fe.observability.enableInitialLoadSpanFailureServiceLogs":false,"databricks.sisu.oneTrustScriptId":"0192d53a-9995-70c2-93f6-6f0628e93929","databricks.fe.infra.useReact19.valueId":null,"databricks.sisu.enableTuuidCookiePersistence":true,"databricks.fe.lakeview.shouldNotAwaitConfigForDashboardsv3":false,"databricks.sisu.recaptcha.lazyLoad.isEnabled":true,"databricks.fe.fsp.enableCbiDenyErrorUI":true,"databricks.fe.webappConfStoreStackTraceLogRatio":0.05,"databricks.fe.spog.sendOrgIdOnTokenDashboards":true,"databricks.fe.infra.enableFetchBackoffOn429":false,"com.databricks.ui.spogFetchingEnabled":true,"databricks.ui.enableInlineCdnFallbackEventEmission":true,"databricks.fe.latency.enableEditorRouteChunkPreload":false,"databricks.fe.fsp.enableAccountIdUrlParamOnEndpointRequest":false,"databricks.fe.config.uiFlagsRedirectMapping":"{\"accountId\": {\"defaultValue\": \"\", \"type\": \"uiFlagKey\", \"uiFlagKey\": \"accountId_new\"}, \"availableWorkspaces\": {\"compoundConfigKey\": \"availableWorkspaces\", \"type\": \"compoundConfigKey\"}, \"centralizedLoginEnabled\": {\"defaultValue\": false, \"type\": \"uiFlagKey\", \"uiFlagKey\": \"databricks.fe.centralizedLoginEnabled\"}, \"cloud\": {\"defaultValue\": \"AWS\", \"type\": \"uiFlagKey\", \"uiFlagKey\": \"cloud_new\"}, \"csrfToken\": {\"compoundConfigKey\": \"csrfToken\", \"type\": \"compoundConfigKey\"}, \"currentWorkspaceId\": {\"defaultValue\": \"\", \"type\": \"uiFlagKey\", \"uiFlagKey\": \"currentWorkspaceId_new\"}, \"deploymentMode\": {\"compoundConfigKey\": \"deploymentMode\", \"type\": \"compoundConfigKey\"}, \"domainSuffix\": {\"compoundConfigKey\": \"domainSuffix\", \"type\": \"compoundConfigKey\"}, \"identityFederationEnabled\": {\"defaultValue\": false, \"type\": \"uiFlagKey\", \"uiFlagKey\": \"identityFederationEnabled\"}, \"isAdmin\": {\"defaultValue\": false, \"type\": \"uiFlagKey\", \"uiFlagKey\": \"isAdmin_new\"}, \"isCloudlessWorkspace\": {\"defaultValue\": false, \"type\": \"uiFlagKey\", \"uiFlagKey\": \"isCloudlessWorkspace\"}, \"orgId\": {\"defaultValue\": 0, \"type\": \"uiFlagKey\", \"uiFlagKey\": \"orgId_new\"}, \"productName\": {\"compoundConfigKey\": \"productName\", \"type\": \"compoundConfigKey\"}, \"themeIdentifier\": {\"defaultValue\": \"databricks\", \"type\": \"uiFlagKey\", \"uiFlagKey\": \"databricks.webapp.themeIdentifier\"}, \"user\": {\"defaultValue\": \"\", \"type\": \"uiFlagKey\", \"uiFlagKey\": \"user_new\"}, \"userId\": {\"defaultValue\": -1, \"type\": \"uiFlagKey\", \"uiFlagKey\": \"userId_new\"}, \"userType\": {\"defaultValue\": \"\", \"type\": \"uiFlagKey\", \"uiFlagKey\": \"userType_new\"}}","databricks.ui.enableAppInitLogEmission":false,"databricks.fe.observability.disableClientTelemetry":false,"databricks.fe.observability.blockedUsageLogMetricNames":"[\"uiFlagEvaluation\",\"uiAnalyticsEvent\",\"frontendAlertUtils\",\"frontendAlertUtilsBurnRate\",\"clientSidePerformance\",\"uiInit\",\"reactInteractionTraceDuration\",\"codeMonCounter\",\"jobsEvent\",\"lakesense\",\"accountsUiClientsideEvent\",\"clientsideEvent\",\"uncaughtJsException\"]","databricks.webapp.databricksDocsBaseHostname":"docs.databricks.com","databricks.fe.infra.enableImplicitContextClassLifecycleWrapping":true,"databricks.fe.infra.enableTopRouterShellTracing":true,"databricks.fe.infra.knownUncaughtJsExceptionMessageRegexes":"[\"Error: Unable to figure out browser width and height.*\", \"^Uncaught SyntaxError: Unexpected token \\\\?\", \"^.*Loading chunk .* failed after .* retries\\\\.\"]","databricks.fe.infra.useBlueMonolithUIBuild":false,"databricks.deploymentMode":"production","databricks.fe.lakeview.enableDashboardChunkPreload":false,"databricks.fe.infra.logThrottler.customRateLimits":"{\"uiFlagEvaluation::\": {\"maxBurst\": 200}}","databricks.fe.dataRooms.enableGenieTokenEmbed":false,"databricks.fe.infra.useReact19":false,"databricks.fe.wexp.usePerWorkspaceQueryClient":true,"databricks.fe.infra.jsExceptionSourceRegexesToNotLog":"[\".*feature-store.*\", \".*mlflow.*\", \"^https://dev.local:.*\", \"^https://spog.dev.local:.*\", \"^https://(.*\\\\.)?localhost:.*\", \"^https://pr.*\\\\.prpreview\\\\.dev\\\\.databricks.com.*\"]","databricks.ui.enableCdnFallbackEventEmission":true,"databricks.fe.infra.fixConfigPrefetch":true,"com.databricks.ui.nonSpogFetchingEnabled":true,"databricks.fe.fsp.enableSpogAutoredirectHostSwap":true,"databricks.sisu.isGoogleTagManagerEnabled":true,"databricks.fe.observability.enableTelemetryAuthBackoff":false,"databricks.buiapiserver.useStripeElementsForTokenisation":false,"databricks.sisu.isOneTrustCookieConsentEnabled":true,"databricks.fe.spog.enableStripInvalidOrgId":true,"databricks.fe.infra.enableWorkerPagePrefetch":true,"databricks.fe.infra.enableClassComponentContextRead":true,"databricks.fe.spog.enableNonSpogWorkspaceLoginHtmlRedirect":true,"databricks.fe.spog.useAccountConsoleCbiFallbackUI":true,"databricks.fe.spog.enableSkipManualRedirectForNonSpogWorkspace":false,"databricks.fe.observability.reliableLoggerV2ThrottleConfig":"{\"001-no-throttle-for-alert-utils-failure\": {\"matches\": [{\"path\": \"entry.observability_log.payload.interaction_phase_payload.status\", \"value\": \"FAILURE\"}, {\"path\": \"entry.observability_log.client_source\", \"value\": \"ALERT_UTILS\"}], \"quotaPerMinute\": 1000000}, \"002-block-viz-lakeview-dashboards-loading-state\": {\"matches\": [{\"path\": \"entry.observability_log.entity.type\", \"value\": \"LOADING_STATE\"}, {\"matchType\": \"pattern\", \"path\": \"entry.observability_log.entity.entity_id\", \"value\": \"^(Design System loading hold: )?(viz\\\\.|lakeview\\\\.).*\\\\.dashboards/\"}], \"quotaPerMinute\": 0}, \"003-observability-log-by-entity-id\": {\"matches\": [{\"path\": \"entry.observability_log\"}], \"quotaPerMinute\": 500, \"throttleKeyPath\": \"entry.observability_log.entity.entity_id\"}, \"003a-app-init-log-by-entity-id\": {\"matches\": [{\"path\": \"entry.app_init_log\"}], \"quotaPerMinute\": 500, \"throttleKeyPath\": \"entry.app_init_log.entity_id\"}, \"004-default-rule-catch-all-remaining\": {\"matches\": [{\"path\": \"entry\"}], \"quotaPerMinute\": 4000}}","com.databricks.ui.userContext.shadowEnabled":false,"databricks.sisu.oneTrustCookieDomain":".login.databricks.com","databricks.fe.designsystem.useNativeBreadcrumb":false,"databricks.fe.designsystem.useNativeIcon":false,"databricks.fe.eda.enableBorderBoxCssReset":true,"databricks.sisu.isAccountDiscoveryDisabled":false,"databricks.fe.observability.reliableLoggerV2UploadTimeoutMs":60000,"databricks.fe.dbsqlui.useSharedFetchForGraphqlRequests":false,"databricks.ui.enableCdnAccessibilityProbe":true,"databricks.fe.fsp.preferBackendNextUrl":true,"databricks.fe.infra.enablePublicUiFlagsReuse":true,"databricks.sisu.isGovCloudOrDod":false,"databricks.fe.accountsui.enableBootstrapWithoutSession":false,"databricks.auth.enableEntraIdLoginHintPassthrough":true,"databricks.fe.infra.emitLegacyAppInitLog":true,"databricks.fe.designsystem.enableNestedTokenScopeInheritance":false,"databricks.sisu.isNavigationMigrationEnabled":false,"databricks.fe.accountsui.enableBootstrapDeploymentModeFromServerSideSafe":true,"databricks.fe.infra.enableWebpackLazyModuleLoading":false,"com.databricks.alert_utils.silencedEventIdRegexes":"[\"^autoSilenced.*\", \"^commandCompareReferenceOrId$\", \"^Failed to fetch unified login setting for account .*\", \"^Failed to fetch assistant setting for account .*\", \".*lakeview\\\\.config\\\\.api\\\\.CreateDashboard\\\\.INTERNAL_ERROR\", \".*lakeview\\\\.config\\\\.dashboard\\\\.ImportDashboard\\\\.INTERNAL_ERROR\", \".*lakeview\\\\.dashboards\\\\.authoring\\\\.url\\\\.invalidViewData*\", \".*lakeview\\\\.dashboards\\\\.authoring\\\\.schemaBrowser\\\\.noDatasetSelected\", \".*lakeview\\\\.dashboards\\\\.authoring\\\\.assistant\\\\.noDatasetSelected\", \".*lakeview\\\\.dashboards\\\\.query\\\\.fetchDataResultsError\", \".*lakeview\\\\.config\\\\.dashboard\\\\.ImportDashboardRequest\\\\.INTERNAL_ERROR\", \".*lakeview\\\\.processing\\\\.subscriptions\\\\.execute\", \".*lakeview\\\\.processing\\\\.subscriptions\\\\.authorize\", \"^logErrorBoundaryError: componentStack is not a string$\", \"^CDN Accessibility.*\", \"^go/featurestorealertssop/FeatureSpecLineageUnexpectedFailure\", \"^sev2IfThrows-InitialUiConfigValues: customConfigsFuture$\", \".*doesn't match url operation name.*\", \"^Failed to fetch from main cloud storage due to uncategorized exception\\\\s*Cloud Path: \\\\/static\\\\/js\\\\/aws-search-index.*\", \"^DuplicateRecordProtoProperty$\", \"^Failed to parse permission error\", \"^UC TablePurgeable unexpected staging table state$\"]","databricks.fe.infra.useApollo3_14":true,"databricks.fe.fsp.enableSeamlessWorkspaceOidcRedirect":false,"databricks.fe.fsp.enableBootstrapAuthRedirectTelemetry":true,"databricks.fe.infra.enableImplicitContextJsxWrapping":true,"databricks.sisu.signupFlowV2Enabled":true,"databricks.fe.spog.useWorkspaceCbiFallbackUI":true,"databricks.fe.lakeview.recordableEmbeddedUIDomainsForAudit":"[\"atlassian\", \"sharepoint\", \"salesforce\", \"retool\", \"notion\", \"quip\", \"nuclino\"]","databricks.fe.infra.deferRouterInteractionStart":true,"databricks.sisu.isSelfServiceSignupDisabled":false,"databricks.fe.editor.enableVanillaMonaco":false,"databricks.fe.eda.enableMitigateExpensiveSelectorsMonaco":true,"databricks.fe.infra.enableCatalogExplorerLandingPreload":true,"databricks.fe.infra.enableReactProfiler":true,"databricks.fe.fsp.enableUiFlagsLoginEndpoint":true,"databricks.fe.wexp.isSpogSoftNavByContextEnabled":true,"databricks.fe.infra.disableConfigFetch":true,"databricks.sisu.signUpIntentCapturePage":false,"databricks.fe.latency.recordNetworkRequestSpans":true,"databricks.sisu.recaptcha.siteKey":"6LelOporAAAAAK_vloEH3R5YNKIWqbFDTJrnlWz4","databricks.fe.infra.implicitContextMissingStackSampleRate":0.01,"databricks.fe.infra.enableSingletonQueryClient":true,"databricks.fe.browserfleet.forwardAlertUtilsToElk":true,"databricks.fe.infra.shouldNotAwaitConfigForHomepage":true,"databricks.fe.infra.enableAppTypeLogging":true,"com.databricks.alert_utils.hostsWithAlertUtilsDisabled":"[\"^dev\\\\.local$\", \".*\\\\.dev\\\\.local$\", \"^localhost$\", \"^pr.*\\\\.prpreview\\\\.dev\\\\.databricks.com$\"]","databricks.fe.infra.enableFetchGzipDecompression":false,"databricks.fe.accountsui.enableMultiAccountAwsMpSignupAwsFormUx":true,"databricks.fe.infra.autoHoldInteractionsOnSuspenseAll":false,"databricks.fe.infra.enableSwapHookInstanceScoping":true,"databricks.fe.latency.instrumentDynamicImports":false,"databricks.fe.designsystem.disableNumberInputWheelValueChange":true,"databricks.fe.wexp.enableNewCsrfRetrievalServerSide":true,"databricks.sisu.isFunctionalLoginViewChooserEnabled":false,"databricks.fe.auth.enableNewWindowLogin":true,"databricks.accountsui.publicSafexAPI.isEnabled":true,"databricks.sisu.recaptcha.isEnabled":true,"databricks.fe.infra.enableFetchOrFailForApolloClient":false,"databricks.fe.infra.enableStartupAppInitSNRAlerting":true,"databricks.fe.infra.enableImplicitContext":true,"databricks.fe.observability.reliableLoggerV2SendQueueMaxWaitForFlushQueueSize":200,"databricks.fe.fsp.enableBootstrapRedirectHandling":true,"databricks.ui.enableRecordCdnAccessibilityTest":true,"databricks.fe.eda.enableMitigateAntdBoxSizingReset":true,"databricks.fe.infra.enableBlockingTelemetryByUserAgent":true,"databricks.fe.observability.traceparentSamplingRate":0.05,"databricks.fe.config.useWebSharedGocx":false,"databricks.fe.infra.uncaughtJsExceptionStackRegexesToIgnore":"[]","databricks.fe.fsp.enableApollo314ObserverDeliveryBatching":true,"databricks.fe.designsystem.useNativeGrid":false,"databricks.fe.editor.enableMonaco0551":false,"databricks.sisu.isSocialOidcLoginDisabled":false,"databricks.fe.accountsui.routeDefinitionRefactor":true,"databricks.ui.enableInlineCdnFallback":false,"databricks.fe.designsystem.useNativeButton":false,"databricks.sisu.recaptcha.sisu.isEnabled":true,"databricks.fe.fsp.enableEmbeddedAppFlowParam":true,"databricks.datarooms.monitoringMetricsMaxPeriodDays":7,"databricks.fe.infra.enablePublicUiFlagsFetch":true,"databricks.fe.infra.uncaughtJsExceptionMessageRegexesToIgnore":"[\"^ResizeObserver loop limit exceeded\", \"^ResizeObserver loop completed with undelivered notifications\\\\.\", \"^Uncaught Error: Illegal value for lineNumber\", \"^Error: Illegal value for lineNumber\", \"^(Error: )?Canceled$\", \"^Error: Talisman extension has not been configured yet\", \"Permission denied to access property \\\"apply\\\"\", \"^Loading chunk .* failed after [0-9]+ retries\", \"Cannot redefine property: googletag\", \"can't access dead object\", \"Client is not running and can't be stopped. It's current state is: starting\"]","databricks.fe.fsp.enableSkipRepeatedCacheWrites":true}</script>
+  <script type="application/json" id="databricks-config">{"indexServingShardName":"ohio-prod","tabStartTimestampMillis":1791493499910,"isDbSentinelCaller":false,"isRegionlessRequest":false,"deploymentMode":"production","servedFromBulletTrain":false,"isCuttingEdge":false,"publicPath":{"mlflow":"https://ui-assets.cloud.databricks.com/","accounts-console":"https://ui-assets.cloud.databricks.com/","feature-store":"https://ui-assets.cloud.databricks.com/","dbstatic":"https://ui-assets.cloud.databricks.com/","monolith":"https://ui-assets.cloud.databricks.com/","jaws":"https://ui-assets.cloud.databricks.com/"},"isPublicHtmlServingRequest":false,"isSpogDomain":false,"enableIsaacWebPreview":"","enableBlueBuild":"","requestId":"3ed20f49-934a-4ad9-944c-e0821f8f4cf0","enablePrPreview":"","enableGitBisect":"","servedVersion":".monolith-ui_2026-10-08_08.44.23Z_master_b49f8de6_1626537001","accountConsoleFallbackUrl":"","isAccountsConsole":false}</script>
+  <script>window.__DATABRICKS_SAFE_FLAGS__=JSON.parse(document.getElementById("databricks-safe-flags").textContent),window.__DATABRICKS_CONFIG__=JSON.parse(document.getElementById("databricks-config").textContent),window.__databricks_isSpogDomain=window.__DATABRICKS_CONFIG__?.isSpogDomain??!1,window.__databricks_uiDeployableToCommitHash={monolith:"b49f8de62581a3b7b02295150ef1e69d2e54e60e"}</script>
+  <script>if(window.__databricks_isSpogDomain){const n=new URL(window.location.href).searchParams.get("next_url"),o=n?`?next_url=${encodeURIComponent(n)}`:"";window.location.replace(`/login${o}`)}</script>
+  <script data-rsbuild-assets-retry="inline">(()=>{const e="[@rsbuild/plugin-assets-retry] ";function n(n){const{domain:t}=n;if("function"!=typeof t)return t;let r;try{const e=t();r=Array.isArray(e)?e.filter(Boolean):[]}catch(i){console.error(e,"resolve domain function failed",i),r=[]}return n.domain=r,r}function t(e,t){const r=n(t);for(let n=0;n<r.length;n++){const t=r[n];if(-1!==e.indexOf(t))return t}return window.origin}const r=/[?#].*$/;function i(e,n,t,i,o,s){return e.replace(n,t).replace(r,"")+function(e,n,t){return!0===t.addQuery?""!==n?`${n}&retry=${e}`:`?retry=${e}`:"function"==typeof t.addQuery?t.addQuery({times:e,originalQuery:n}):""}(i+1,o,s)}const o={link:HTMLLinkElement,script:HTMLScriptElement,img:HTMLImageElement};function s(e,r){const i=r.target,s=i.tagName.toLocaleLowerCase(),a=(c=i)instanceof HTMLScriptElement||c instanceof HTMLImageElement?c.src:c instanceof HTMLLinkElement?c.href:null;var c;if(!a)return!1;let u=Number(i.dataset.rbRuleI||"-1");const l=e[u]||function(e,r,i){for(let o=0;o<i.length;o++){const s=i[o],a=s.test;let c=!0;a instanceof RegExp?c=a.test(e):"string"==typeof a?c=new RegExp(a).test(e):"function"==typeof a&&(c=a(e));const u=n(s);if(u.length>0){const n=t(e,s);u.includes(n)||(c=!1)}if(s.type&&s.type.length>0&&(s.type.includes(r)||(c=!1)),c)return s}return null}(a,s,e);if(!l)return!1;u=e.indexOf(l);const d=l.type;return!!(s&&-1!==d.indexOf(s)&&o[s]&&i instanceof o[s])&&{target:i,tagName:s,url:a,rule:l,ruleIndex:u}}function a(n,t,r){n instanceof HTMLScriptElement&&(r.isAsync?document.body.appendChild(t):console.warn(e,"load sync script failed, for security only async/defer script can be retried",n)),n instanceof HTMLLinkElement&&document.getElementsByTagName("head")[0].appendChild(t),n instanceof HTMLImageElement&&(n.src=r.url,n.dataset.rbRetryTimes=String(r.times),n.dataset.rbOriginalQuery=String(r.originalQuery))}function c(e,r){var o;const c=s(e,r);if(!1===c)return;const{target:u,tagName:l,url:d,rule:f,ruleIndex:y}=c;if("u">typeof window&&Object.keys(window.__RB_ASYNC_CHUNKS__||{}).some(e=>-1!==d.indexOf(e)))return;const m=t(d,f),g=Number(u.dataset.rbRetryTimes)||0;if(g===f.max){if("function"==typeof f.onFail){const e={times:g,domain:m,url:d,tagName:l,isAsyncChunk:!1};f.onFail(e)}return}const p=function(e,r){const i=n(r),o=t(e,r),s=i.indexOf(o);return-1===s?o:i[(s+1)%i.length]}(m,f),h=null!=(o=u.dataset.rbOriginalQuery)?o:function(e){const n=e.split("?")[1];return n?`?${n.split("#")[0]}`:""}(d),L=Boolean(u.dataset.rbAsync)||u.async||u.defer,b={url:i(d,m,p,g,h,f),times:g+1,originalQuery:h,ruleIndex:y,crossOrigin:f.crossOrigin,isAsync:L},S=function(e,n){const t=!0===n.crossOrigin?"anonymous":n.crossOrigin;if(e instanceof HTMLScriptElement){const e=document.createElement("script");return e.src=n.url,t&&(e.crossOrigin=t),n.times&&(e.dataset.rbRetryTimes=String(n.times)),n.isAsync&&(e.dataset.rbAsync=""),void 0!==n.originalQuery&&(e.dataset.rbOriginalQuery=n.originalQuery),n.ruleIndex>=0&&(e.dataset.rbRuleI=String(n.ruleIndex)),e}if(e instanceof HTMLLinkElement){const r=document.createElement("link");return r.rel=e.rel||"stylesheet",e.as&&(r.as=e.as),r.href=n.url,t&&(r.crossOrigin=t),n.times&&(r.dataset.rbRetryTimes=String(n.times)),void 0!==n.originalQuery&&(r.dataset.rbOriginalQuery=n.originalQuery),r}}(u,b),E={times:g,domain:m,url:d,tagName:l,isAsyncChunk:!1};"function"==typeof f.onRetry&&f.onRetry(E);const T="function"==typeof f.delay?f.delay(E):f.delay;T>0?setTimeout(()=>{a(u,S,b)},T):a(u,S,b)}!function(){"u">typeof window&&!window.__RB_ASYNC_CHUNKS__&&(window.__RB_ASYNC_CHUNKS__={});try{const e=[{max:3,type:["link","script","img"],domain:[],crossOrigin:!1,delay:function(e){const n=globalThis;return n.recordInitialLoadSpanSuccess?.("chunkLoadRetry"),n.recordAppInitLog?.("chunkLoadRetry","SUCCESS"),1e3*Math.pow(2,e.times)},addQuery:!0,onFail:function(e){const n=globalThis;n.recordInitialLoadSpanSuccess?.("chunkLoadFailure"),n.recordChunkLoadFailureWithDetails?.(e.url,e.url),n.recordAppInitChunkLoadFailure?.(e.url),n.__databricksCdnFallbackToOrigin?.(e.url,e.tagName,e.isAsyncChunk)}}];"u">typeof window&&void 0!==window.document&&(document.addEventListener("error",n=>{if(n&&n.target instanceof Element)try{c(e,n)}catch(t){console.error("retry error captured",t)}},!0),document.addEventListener("load",n=>{if(n&&n.target instanceof Element)try{!function(e,n){const r=s(e,n);if(!1===r)return;const{target:i,tagName:o,url:a,rule:c}=r,u=t(a,c),l=Number(i.dataset.rbRetryTimes)||0;if(0!==l&&"function"==typeof c.onSuccess){const e={times:l,domain:u,url:a,tagName:o,isAsyncChunk:!1};c.onSuccess(e)}}(e,n)}catch(r){console.error("load error captured",r)}},!0))}catch(e){console.error("monitor error captured",e)}}()})()</script>
+  <link rel="icon" href="https://ui-assets.cloud.databricks.com/favicon.ico">
+  <meta name="db-compiler" content="@rsbuild/core@2.2.5">
+  <script>
+  function setNoCdnAndReload() {
+      document.cookie = `x-databricks-cdn-inaccessible=true; path=/; max-age=86400`;
+      const metric = 'cdnFallbackOccurred';
+      const browserUserAgent = navigator.userAgent;
+      const browserTabId = window.browserTabId;
+      const performanceEntry = performance.getEntriesByType('resource').filter(e => e.initiatorType === 'script').slice(-1)[0]
+      sessionStorage.setItem('databricks-cdn-fallback-telemetry-key', JSON.stringify({ tags: { browserUserAgent, browserTabId }, performanceEntry}));
+      window.location.reload();
   }
-}
+</script>
+  <script>
+  // Set a manual timeout for dropped packets to CDN
+  function loadScriptWithTimeout(src, timeout) {
+    return new Promise((resolve, reject) => {
+      let script;
+      let timer;
+      const cleanup = () => {
+        clearTimeout(timer);
+        document.removeEventListener('DOMContentLoaded', appendScript);
+      };
+      const appendScript = () => {
+        document.removeEventListener('DOMContentLoaded', appendScript);
+        try {
+          script = document.createElement('script');
+          script.src = src;
+          script.onload = () => { cleanup(); resolve(); };
+          script.onerror = (error) => { cleanup(); reject(error); };
+          document.head.appendChild(script);
+        } catch (error) {
+          cleanup();
+          reject(error);
+        }
+      };
+
+      // Arm the timeout immediately, independent of DOMContentLoaded. A CDN asset
+      // whose packets are dropped can block the parser so DOMContentLoaded never
+      // fires. Starting the timer here guarantees the no-CDN fallback still runs.
+      timer = setTimeout(() => {
+        cleanup();
+        reject(new Error('Script load timeout'));
+      }, timeout);
+
+      // Inject the entry bundle only after the document has been parsed, so a
+      // warm-cache bundle can't execute before #app-root exists in the DOM and
+      // crash app bootstrap with "Element must be provided to render React component".
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', appendScript, { once: true });
+      } else {
+        appendScript();
+      }
+    });
+  }
+  loadScriptWithTimeout('https://ui-assets.cloud.databricks.com/static/js/runtime.d7591c0b405cafa4.js', 10000).catch(setNoCdnAndReload);
+</script>
+  <script>
+  function setNoCdnAndReload() {
+      document.cookie = `x-databricks-cdn-inaccessible=true; path=/; max-age=86400`;
+      const metric = 'cdnFallbackOccurred';
+      const browserUserAgent = navigator.userAgent;
+      const browserTabId = window.browserTabId;
+      const performanceEntry = performance.getEntriesByType('resource').filter(e => e.initiatorType === 'script').slice(-1)[0]
+      sessionStorage.setItem('databricks-cdn-fallback-telemetry-key', JSON.stringify({ tags: { browserUserAgent, browserTabId }, performanceEntry}));
+      window.location.reload();
+  }
+</script>
+  <script>
+  // Set a manual timeout for dropped packets to CDN
+  function loadScriptWithTimeout(src, timeout) {
+    return new Promise((resolve, reject) => {
+      let script;
+      let timer;
+      const cleanup = () => {
+        clearTimeout(timer);
+        document.removeEventListener('DOMContentLoaded', appendScript);
+      };
+      const appendScript = () => {
+        document.removeEventListener('DOMContentLoaded', appendScript);
+        try {
+          script = document.createElement('script');
+          script.src = src;
+          script.onload = () => { cleanup(); resolve(); };
+          script.onerror = (error) => { cleanup(); reject(error); };
+          document.head.appendChild(script);
+        } catch (error) {
+          cleanup();
+          reject(error);
+        }
+      };
+
+      // Arm the timeout immediately, independent of DOMContentLoaded. A CDN asset
+      // whose packets are dropped can block the parser so DOMContentLoaded never
+      // fires. Starting the timer here guarantees the no-CDN fallback still runs.
+      timer = setTimeout(() => {
+        cleanup();
+        reject(new Error('Script load timeout'));
+      }, timeout);
+
+      // Inject the entry bundle only after the document has been parsed, so a
+      // warm-cache bundle can't execute before #app-root exists in the DOM and
+      // crash app bootstrap with "Element must be provided to render React component".
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', appendScript, { once: true });
+      } else {
+        appendScript();
+      }
+    });
+  }
+  loadScriptWithTimeout('https://ui-assets.cloud.databricks.com/static/js/vendor-coreVendors.ff979e39a14ebbed.js', 10000).catch(setNoCdnAndReload);
+</script>
+  <script>
+  function setNoCdnAndReload() {
+      document.cookie = `x-databricks-cdn-inaccessible=true; path=/; max-age=86400`;
+      const metric = 'cdnFallbackOccurred';
+      const browserUserAgent = navigator.userAgent;
+      const browserTabId = window.browserTabId;
+      const performanceEntry = performance.getEntriesByType('resource').filter(e => e.initiatorType === 'script').slice(-1)[0]
+      sessionStorage.setItem('databricks-cdn-fallback-telemetry-key', JSON.stringify({ tags: { browserUserAgent, browserTabId }, performanceEntry}));
+      window.location.reload();
+  }
+</script>
+  <script>
+  // Set a manual timeout for dropped packets to CDN
+  function loadScriptWithTimeout(src, timeout) {
+    return new Promise((resolve, reject) => {
+      let script;
+      let timer;
+      const cleanup = () => {
+        clearTimeout(timer);
+        document.removeEventListener('DOMContentLoaded', appendScript);
+      };
+      const appendScript = () => {
+        document.removeEventListener('DOMContentLoaded', appendScript);
+        try {
+          script = document.createElement('script');
+          script.src = src;
+          script.onload = () => { cleanup(); resolve(); };
+          script.onerror = (error) => { cleanup(); reject(error); };
+          document.head.appendChild(script);
+        } catch (error) {
+          cleanup();
+          reject(error);
+        }
+      };
+
+      // Arm the timeout immediately, independent of DOMContentLoaded. A CDN asset
+      // whose packets are dropped can block the parser so DOMContentLoaded never
+      // fires. Starting the timer here guarantees the no-CDN fallback still runs.
+      timer = setTimeout(() => {
+        cleanup();
+        reject(new Error('Script load timeout'));
+      }, timeout);
+
+      // Inject the entry bundle only after the document has been parsed, so a
+      // warm-cache bundle can't execute before #app-root exists in the DOM and
+      // crash app bootstrap with "Element must be provided to render React component".
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', appendScript, { once: true });
+      } else {
+        appendScript();
+      }
+    });
+  }
+  loadScriptWithTimeout('https://ui-assets.cloud.databricks.com/static/js/vendor-lodash.9b4afc65554019f6.js', 10000).catch(setNoCdnAndReload);
+</script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/629305.c67c5b01d91c233d.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/197905.cab31ed79099257a.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/221322.d992facebafbc1da.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/919439.e4c1f3ad788764e3.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/988172.0aa33dd3c6aa0275.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/151074.fd1ff0d4a64f11c4.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/105914.5bfca8930d281faa.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/845460.fc7271cf7f494a0c.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/965165.26462b563dc051e9.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/565945.56cc5e6df0e81ec9.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/876127.91c08b5514090b69.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/933526.bc4f035242d413ca.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/429398.e17f501b5568430b.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/94051.54fd31eb22ddefd8.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/274195.32e5a9908ea768e0.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/99170.b55a7a034a0bdc63.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/806324.755c49b83fe396c9.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/776310.d96ae90cbb24e1be.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/505292.20be7c3aa0a92e67.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/240203.473020cc50542f9d.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/653939.f3717ad9745fa897.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/612862.236744cbf5b36cfa.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/872977.9a5d3ada917e936c.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/937883.bf9bcab97ed260e0.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/187225.a57f70a109b43996.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/729531.526817af618e2a3c.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/504090.5814907a65f99be7.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/415017.167778a6f6b5cd79.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/822485.862ee8d37889432f.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/314488.07d4bcc921c4186a.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/507446.50a7e2d12cbb5c7a.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/761559.bf50c7d99900601c.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/836848.35c53d07b5650024.js"></script>
+  <script defer src="https://ui-assets.cloud.databricks.com/static/js/409059.b0be841d1cf4f665.js"></script>
+  <script>
+  function setNoCdnAndReload() {
+      document.cookie = `x-databricks-cdn-inaccessible=true; path=/; max-age=86400`;
+      const metric = 'cdnFallbackOccurred';
+      const browserUserAgent = navigator.userAgent;
+      const browserTabId = window.browserTabId;
+      const performanceEntry = performance.getEntriesByType('resource').filter(e => e.initiatorType === 'script').slice(-1)[0]
+      sessionStorage.setItem('databricks-cdn-fallback-telemetry-key', JSON.stringify({ tags: { browserUserAgent, browserTabId }, performanceEntry}));
+      window.location.reload();
+  }
+</script>
+  <script>
+  // Set a manual timeout for dropped packets to CDN
+  function loadScriptWithTimeout(src, timeout) {
+    return new Promise((resolve, reject) => {
+      let script;
+      let timer;
+      const cleanup = () => {
+        clearTimeout(timer);
+        document.removeEventListener('DOMContentLoaded', appendScript);
+      };
+      const appendScript = () => {
+        document.removeEventListener('DOMContentLoaded', appendScript);
+        try {
+          script = document.createElement('script');
+          script.src = src;
+          script.onload = () => { cleanup(); resolve(); };
+          script.onerror = (error) => { cleanup(); reject(error); };
+          document.head.appendChild(script);
+        } catch (error) {
+          cleanup();
+          reject(error);
+        }
+      };
+
+      // Arm the timeout immediately, independent of DOMContentLoaded. A CDN asset
+      // whose packets are dropped can block the parser so DOMContentLoaded never
+      // fires. Starting the timer here guarantees the no-CDN fallback still runs.
+      timer = setTimeout(() => {
+        cleanup();
+        reject(new Error('Script load timeout'));
+      }, timeout);
+
+      // Inject the entry bundle only after the document has been parsed, so a
+      // warm-cache bundle can't execute before #app-root exists in the DOM and
+      // crash app bootstrap with "Element must be provided to render React component".
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', appendScript, { once: true });
+      } else {
+        appendScript();
+      }
+    });
+  }
+  loadScriptWithTimeout('https://ui-assets.cloud.databricks.com/static/js/login-public.db0f878c1572ae24.js', 10000).catch(setNoCdnAndReload);
+</script>
+ </head>
+ <body class="light-mode">
+  <script>function initializeTelemetry(e){const t=Boolean(window.__DATABRICKS_CONFIG__?.isCuttingEdge),n=navigator.language,i=Date.now(),{appSourceType:r,getHeaders:o,telemetryEndpoint:a,unauthTelemetryEndpoint:s}=e,c=e.fetchWithErrorInfo||function(e,t,n=!1){let i;try{i=window.fetch(e,t)}catch(r){throw r.message=`Error initializing fetch for ${e}: ${r.message}`,r}return i.catch(t=>{throw t.message=`Error while fetching ${e}: ${t.message}`,t})},d=e.shouldIgnoreError||function(e){return!1},l=window.__DATABRICKS_CONFIG__?.isRegionlessRequest??!1,_=window.__DATABRICKS_CONFIG__?.isPublicHtmlServingRequest??!1,p=window.__databricks_isSpogDomain??!1,u=window.__DATABRICKS_CONFIG__?.publicPath,w=Object.values(u??{}).find(e=>"string"==typeof e&&e.startsWith("https://")),m=Boolean(w),f="function"==typeof window.loadScriptWithTimeout,h=window.__DATABRICKS_SAFE_FLAGS__?.["databricks.fe.observability.enableInitialLoadSpanFailureServiceLogs"]??!1,g=window.__DATABRICKS_SAFE_FLAGS__?.["databricks.ui.enableCdnFallbackEventEmission"]??!1,S=s??"/telemetry-unauth?t=";function y(){const e=window.crypto?.randomUUID?.();return e||"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,e=>{const t=16*Math.random()|0;return("x"===e?t:3&t|8).toString(16)})}function b(e){if(e<=0)return"";if(void 0!==window.crypto?.getRandomValues){const t=Math.ceil(e/2);return Array.from(window.crypto.getRandomValues(new Uint8Array(t))).map(e=>e.toString(16).padStart(2,"0")).join("").substring(0,e)}const t=new Array(e);for(let n=0;n<e;n++)t[n]="0123456789abcdef".charAt(Math.floor(16*Math.random()));return t.join("")}function I(){const e=window.navigator.onLine,t=window.navigator.connection,n=t?.rtt??-1,i=t?.downlink??-1;return{browserNavigatorOnline:e,browserConnectionEstimatedRtt:n,browserConnectionEstimatedDownlink:i,browserConnected:e&&n>0&&i>0}}window.__databricks_networkConnectivityTags=I;const A=navigator.userAgent;let E=!0;if(window.__DATABRICKS_SAFE_FLAGS__?.["databricks.fe.infra.enableBlockingTelemetryByUserAgent"]){const e=["bingbot","RedTeamGlobal"].some(e=>A.includes(e));E=!e}const T=y();Object.defineProperty(window,"browserTabId",{value:T});const C="tuuid",k="C0002";function R(e){return document.cookie.split(";").map(e=>e.trim()).filter(t=>t.startsWith(`${e}=`)).map(t=>t.substring(e.length+1))}const v=R(C)[0],P=function(e){if(void 0!==e)try{return decodeURIComponent(e)}catch{return}}(v),L=void 0!==v&&void 0===P,O=new URLSearchParams(window.location.search).get("tuuid")||void 0,N=function(){const e=function(){let e,t=-1/0;for(const n of R("OptanonConsent")){const i=new URLSearchParams(n),r=i.get("datestamp"),o=r?new Date(r).getTime():NaN,a=Number.isNaN(o)?-1/0:o;(void 0===e||a>=t)&&(t=a,e=i.get("groups")??"")}return e}();if(void 0===e)return"unknown";const t=e.split(",").map(e=>e.trim()).find(e=>e.startsWith(`${k}:`));return t===`${k}:1`?"granted":t===`${k}:0`?"withdrawn":"unknown"}(),D=!0===window.__DATABRICKS_SAFE_FLAGS__?.["databricks.sisu.enableTuuidCookiePersistence"];let F;if(D&&"SIGNUP_SIGNIN"===r&&"granted"===N){if(F=P||O||y(),x=F,document.cookie=`${C}=${encodeURIComponent(x)}; domain=.databricks.com; path=/; max-age=31536000; SameSite=Lax; Secure`,O&&O!==F){const e=new URL(window.location.href);e.searchParams.set("tuuid",F),window.history.replaceState(window.history.state,"",e.toString())}}else D&&"withdrawn"!==N&&!L||(document.cookie=`${C}=; domain=.databricks.com; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`),F=O||y();var x;if(Object.defineProperty(window,"__databricks_tuuid",{value:F}),window.crashReport){const e=1024;window.crashReport.initialize(e).then(()=>window.crashReport?.set("browserTabId",T)).catch(()=>{})}Object.defineProperty(window,"tabStartTimestampMillis",{value:window.__DATABRICKS_CONFIG__?.tabStartTimestampMillis??i});const U=Boolean(window.__DATABRICKS_CONFIG__?.tabStartTimestampMillis);Object.defineProperty(window,"tabStartClientTimestampMillis",{value:i}),Object.defineProperty(window,"serverTimeSyncTimestampMillis",{value:window.__DATABRICKS_CONFIG__?.tabStartTimestampMillis??i,configurable:!0,writable:!0}),Object.defineProperty(window,"serverTimeSyncTabAgeMillis",{value:0,configurable:!0,writable:!0});const B=b(32),G=b(16),M=`${B}_${G}`;window.getInitialLoadSpanDetails=function(){return{traceId:B,spanId:G}};let z=!1;const H=`uiInitTimestamp-${r}`,K=parseInt(window.localStorage?.getItem(H)||"",10),j=Date.now();let W;!isNaN(K)&&j<K+6e4?z=!0:window.localStorage?.setItem(H,j.toString());try{window.Intl&&"function"==typeof window.Intl.DateTimeFormat&&(W=Intl.DateTimeFormat().resolvedOptions().timeZone)}catch(ie){}function $(e){const i=e?.context?.client_context?.persist_to_service_logs??!1,o=Date.now(),a=window.performance.now(),s={context:{client_context:{tab_id:window.browserTabId,tab_age_millis:a,tab_age_double_millis:a,performance_now_millis:a,timestamp_millis:o,tab_start_timestamp_millis:window.tabStartTimestampMillis,is_tab_start_timestamp_millis_from_server:U,tab_start_client_timestamp_millis:window.tabStartClientTimestampMillis,latest_server_time_sync_timestamp_millis:window.serverTimeSyncTimestampMillis,tab_age_from_latest_server_time_sync_millis:window.serverTimeSyncTabAgeMillis,browser_language:n,user_agent:A,tab_has_focus:document.hasFocus(),location_host_name:window.location.hostname,location_path_name:window.location.pathname,location_hash:window.location.hash,location_search_params:window.location.search,browser_time_zone:W,is_cutting_edge:t,persist_to_service_logs:i,platform_type:"WEB"}}};let c=e;"INTERACTION_PHASE"===e?.entry?.observability_log?.type&&(c={...e,entry:{...e?.entry,observability_log:{...e?.entry?.observability_log,client_source:"PRE_APP_INIT",payload:{...e?.entry?.observability_log?.payload,trace_id:B,span_id:G,parent_span_id:void 0,parent_span_id_chain:void 0,parent_trace_id:void 0,interaction_id:M,root_interaction_id:M,interaction_phase_payload:{name:"telemetry-init-html",type:"COMPLETE",status:"SUCCESS",...e?.entry?.observability_log?.payload?.interaction_phase_payload,span_attributes:{...e?.entry?.observability_log?.payload?.interaction_phase_payload?.span_attributes,feature_enabled:{...e?.entry?.observability_log?.payload?.interaction_phase_payload?.span_attributes?.feature_enabled,is_spog:p,is_regionless:l,is_public_html_serving:_,is_cdn_public_path_injected:m,is_cdn_fallback_script_injected:f},html:{...e?.entry?.observability_log?.payload?.interaction_phase_payload?.span_attributes?.html,app_source_type:r,is_duplicated:z}},app_source_type:r,is_spog:p,is_regionless:l,is_duplicated:z}}}}});const d={frontend_log_event_id:y(),inferred_timestamp_micros:o,inferred_timestamp_millis:o,...c,...s};return JSON.stringify({uploadTime:o,items:[],protoLogs:[JSON.stringify(d)]})}function V(e){if(E){const t={method:"POST",credentials:"include",body:$(e),headers:o(),keepalive:!0};c(a+Date.now(),t,!0),l&&S!==a&&c(S+Date.now(),t,!0)}}function q(e){try{const t=performance.getEntriesByType("resource");return e?t.filter(e):t}catch(t){return[]}}function J(e){try{return new URL(e,window.location.origin)}catch(t){return}}window.recordObservabilityEvent=V,window.recordInitialLoadSpanSuccess=function(e){V({entry:{observability_log:{type:"INTERACTION_PHASE",entity:{type:"INTERACTION",sub_type:"INITIAL_LOAD",entity_id:e}}}})},window.recordInitialLoadSpanFailure=function(e,t){V({context:{client_context:{persist_to_service_logs:h}},entry:{observability_log:{type:"INTERACTION_PHASE",entity:{type:"INTERACTION",sub_type:"INITIAL_LOAD",entity_id:e},payload:{interaction_phase_payload:{name:"initialLoadSpanFailure",type:"COMPLETE",status:"FAILURE",exception:{message:t.message,raw_stack:t.error?.stack?.toString()},exception_metadata:{source:t.source,lineno:t.lineno,colno:t.colno,js_exception_before_init:!0,exception_log_source:"PRE_APP_INIT_WINDOW_ON_ERROR"}}}}}})},window.recordAppRootRendered=function(){window.recordInitialLoadSpanSuccess?.("appRootRendered")},window.recordChunkLoadFailureWithDetails=function(e,t){const n=function(e){const t=J(e),n=t?.pathname.split("/").pop()||e;return q(e=>("script"===e.initiatorType||"link"===e.initiatorType)&&e.name.includes(n)).map(e=>{const t=J(e.name),n=t?.searchParams.get("retry-attempt"),i=n?parseInt(n,10):0,r=Number.isNaN(i)?0:i;return{url:e.name,responseStatus:e.responseStatus??-1,retryAttempt:r,duration:Math.round(e.duration),transferSize:e.transferSize??-1,encodedBodySize:e.encodedBodySize??-1,initiatorType:(o=e.initiatorType,{script:"SCRIPT",link:"LINK",css:"CSS",xmlhttprequest:"XMLHTTPREQUEST",fetch:"FETCH",beacon:"BEACON",img:"IMG",iframe:"IFRAME",navigation:"NAVIGATION"}[o]??"OTHER")};var o})}(t),i=I(),r=J(t);V({entry:{observability_log:{type:"INTERACTION_PHASE",entity:{type:"INTERACTION",sub_type:"INITIAL_LOAD",entity_id:"chunkLoadFailure"},payload:{interaction_phase_payload:{name:"chunkLoadFailure",type:"COMPLETE",status:"FAILURE",span_attributes:{chunk_load_failure:{chunk_id:e,chunk_src:r?.pathname||t,attempts:n.map(e=>({retry_attempt:e.retryAttempt,response_status:e.responseStatus,duration_millis:Math.round(e.duration),transfer_size_bytes:e.transferSize,encoded_body_size_bytes:e.encodedBodySize,initiator_type:e.initiatorType}))},browser_performance:{navigator_online:i.browserNavigatorOnline,navigator_connection_rtt_millis:i.browserConnectionEstimatedRtt,navigator_connection_downlink_mbps:i.browserConnectionEstimatedDownlink}}}}}}})};const Q="databricks-cdn-fallback-telemetry-key";window.recordCdnFallbackEvent=function(){const e=window.sessionStorage?.getItem(Q);if(E&&e){const t=function(e){try{return JSON.parse(e).performanceEntry}catch(t){return void window.recordInitialLoadSpanFailure?.("cdnFallbackEventParseFailure",{message:"Failed to parse fallback telemetry object",error:t})}}(e);V({entry:{observability_log:{type:"INTERACTION_PHASE",entity:{type:"INTERACTION",sub_type:"INITIAL_LOAD",entity_id:"cdnFallbackEventByInjectedScript"},payload:{interaction_phase_payload:{name:"cdnFallbackEventByInjectedScript",type:"COMPLETE",status:"FAILURE",span_attributes:{resource_timing:{name:t?.name,timing:{start_time:t?.startTime,duration:t?.duration,decoded_body_size:t?.decodedBodySize,encoded_body_size:t?.encodedBodySize,transfer_size:t?.transferSize,response_status:t?.responseStatus}}}}}}}}),window.sessionStorage?.removeItem(Q)}},g&&window.recordCdnFallbackEvent(),window.recordInitialLoadSpanSuccess?.("init");let Z=0;function Y(e,t,n,i,r){Z++>4||d(e)||window.recordInitialLoadSpanFailure?.("jsExceptionV3",{message:e,source:t||void 0,lineno:n||void 0,colno:i||void 0,error:r||void 0})}window.onerror=function(e,t,n,i,r){Y(String(e),t||null,n||null,i||null,r||null)},window.onunhandledrejection=function(e){const t=String(e.reason);d(t)?e.preventDefault():Y(t,null,null,null,e.reason)};let X=!1;function ee(e){if(navigator.sendBeacon&&E&&!X){const t=Date.now();let n="TYPE_UNSPECIFIED";switch(e&&e.type||"unknown"){case"beforeunload":n="BEFORE_UNLOAD";break;case"unload":n="UNLOAD";break;case"pagehide":n="PAGE_HIDE";break;case"authredirect":n="AUTH_REDIRECT";break;case"workspace_redirect":n="WORKSPACE_REDIRECT_REQUIRED";break;case"spog_renamed_redirect":n="SPOG_URL_RENAMED";break;case"spog_disabled_redirect":n="SPOG_DISABLED_URL_CUSTOMIZATION";break;case"spog_autoredirect":n="SPOG_AUTOREDIRECT_REQUIRED";break;case"azure_pending_signup_redirect":n="AZURE_PENDING_SIGNUP_REDIRECT_REQUIRED"}const i=$({entry:{observability_log:{type:"INTERACTION_PHASE",entity:{type:"INTERACTION",sub_type:"INITIAL_LOAD",entity_id:"pageExitBeforeAppInitComplete"},payload:{interaction_phase_payload:{name:"pageExitBeforeAppInitComplete",type:"COMPLETE",status:"SUCCESS",page_exit_event_type:n,span_attributes:{html:{page_exit_event_type:n}}}}}}});navigator.sendBeacon(a+t,i),l&&S!==a&&navigator.sendBeacon(S+t,i),X=!0}}window.sendBeaconOnPageExit=ee,window.addEventListener("pagehide",ee),window.cleanupAfterAppInit=()=>{window.removeEventListener("pagehide",ee)};const te="startupHangTimestamp";function ne(e){if(!e)return!1;const{name:t,responseStatus:n}=e,i=void 0!==n&&[0].includes(n),r=t?.includes(".js")&&t.includes("&retry-attempt=3"),o=/(?:main|login)(?:\.[a-zA-Z0-9]+)?\.js/.test(t);return i&&(r||o)}"WORKSPACE_CONSOLE_HOST"===r&&(window.startupHangTimer=setTimeout(()=>{!function(){const e=window.localStorage?.getItem(te);if(e){const t=parseInt(e,10);return Date.now()-t<12e4}return!1}()?(window.recordInitialLoadSpanSuccess?.("startupHang"),window.localStorage?.setItem(te,Date.now().toString())):window.recordInitialLoadSpanSuccess?.("startupHangThrottle")},6e4)),window.__DATABRICKS_SAFE_FLAGS__?.["databricks.fe.infra.enableStartupAppInitSNRAlerting"]&&(window.startupAppInitSNR=setInterval(()=>{const e=Object.entries(function(){const e={};return q(e=>"script"===e.initiatorType||"link"===e.initiatorType).filter(ne).forEach(t=>{const{name:n,responseStatus:i}=t;void 0===e[n]&&(e[n]=[]),e[n].push(i)}),e}());if(e.length>0){const t=JSON.stringify({failedNetworkScripts:e});window.recordInitialLoadSpanFailure?.("clientNetworkScriptLoadFailure",{message:t}),clearInterval(window.startupAppInitSNR),window.cleanupAfterAppInit?.(),clearTimeout(window.startupHangTimer)}},1e3))}function installCdnOriginFallback(){const e=window.__DATABRICKS_CONFIG__?.publicPath,t=Object.values(e??{}).find(e=>"string"==typeof e&&e.startsWith("https://"));if(!t)return;const n=()=>Boolean(window.__DATABRICKS_SAFE_FLAGS__?.["databricks.ui.enableInlineCdnFallback"]),i=()=>{try{return performance.getEntriesByType("resource")}catch{return[]}},r=(e,t,n)=>{if(!Boolean(window.__DATABRICKS_SAFE_FLAGS__?.["databricks.ui.enableInlineCdnFallbackEventEmission"]))return;const r=n?i().find(e=>e.name===n):void 0,o="reloadTimeOut"===e?"TIMED_OUT":"FAILURE",a={name:r?.name??n,initiator_type:"link"===t?"LINK":"SCRIPT",timing:{start_time:r?.startTime,duration:r?.duration,decoded_body_size:r?.decodedBodySize,encoded_body_size:r?.encodedBodySize,transfer_size:r?.transferSize,response_status:r?.responseStatus}};window.recordObservabilityEvent?.({entry:{observability_log:{type:"INTERACTION_PHASE",entity:{type:"INTERACTION",sub_type:"INITIAL_LOAD",entity_id:"cdnFallback"},payload:{interaction_phase_payload:{name:e,type:"COMPLETE",status:o,span_attributes:{feature_enabled:{inline_cdn_fallback_event:!0},resource_timing:a}}}}}}),window.recordAppInitLog?.("cdnFallback",o,void 0,{resource_timing:a})},o=()=>{document.cookie="x-databricks-cdn-inaccessible=true; path=/; max-age=86400"},a=new Set;window.__databricksCdnFallbackToOrigin=(i,s,c)=>{if(i.startsWith(t)&&("script"===s||"link"===s)){if(c){if(!window.__databricksChunkPreloader?.preloadedChunks?.has(i.split("?")[0]))return;if(r("reloadInitialPageChunk",s,i),!n())return;return o(),void window.location.reload()}r("reRequestFromOrigin",s,i),n()&&((()=>{for(const t of Object.keys(e))e[t]="/",window.__databricksAssetPublicPathSetters?.[t]?.("/")})(),o(),(e=>{const n="/"+e.slice(t.length).split("?")[0];if(!a.has(n)){if(a.add(n),n.endsWith(".css")){const e=document.createElement("link");return e.rel="stylesheet",e.href=n,void document.head.appendChild(e)}if(n.endsWith(".js")){const e=document.createElement("script");e.src=n,document.head.appendChild(e)}}})(i))}},window.setTimeout(()=>{i().some(e=>("script"===e.initiatorType||"link"===e.initiatorType)&&e.name.startsWith(t))||document.cookie.includes("x-databricks-cdn-inaccessible=true")||(r("reloadTimeOut"),n()&&(o(),window.location.reload()))},1e4)}function initializeAppInit(e){if(!(window.__DATABRICKS_SAFE_FLAGS__?.["databricks.ui.enableAppInitLogEmission"]??!1))return;const{getHeaders:t,telemetryEndpoint:n,unauthTelemetryEndpoint:i}=e,r=window.__DATABRICKS_CONFIG__?.isRegionlessRequest??!1,o=i??"/telemetry-unauth?t=";let a,s,c=!0;if(window.__DATABRICKS_SAFE_FLAGS__?.["databricks.fe.infra.enableBlockingTelemetryByUserAgent"]){c=!["bingbot","RedTeamGlobal"].some(e=>navigator.userAgent.includes(e))}function d(){const e=window.crypto?.randomUUID?.();return e||"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,e=>{const t=16*Math.random()|0;return("x"===e?t:3&t|8).toString(16)})}function l(){const e=new Uint8Array(8);if(void 0!==window.crypto?.getRandomValues)window.crypto.getRandomValues(e);else for(let t=0;t<e.length;t++)e[t]=256*Math.random()|0;return Array.from(e).map(e=>e.toString(16).padStart(2,"0")).join("")}function _(e,t,n){window.fetch(e+t,n).catch(()=>{})}function p(e,t,n,i,r){return JSON.stringify({uploadTime:n,items:[],protoLogs:[JSON.stringify({frontend_log_event_id:d(),inferred_timestamp_micros:n,inferred_timestamp_millis:n,entry:{app_init_log:{entity_id:e,client_source:"PRE_APP_INIT",phase_type:"COMPLETE",status:t,trace_id:window.getInitialLoadSpanDetails?.().traceId,span_id:l(),frontend_error:i&&{exception:{message:i.message,raw_stack:i.error?.stack?.toString()}},...r}},context:{client_context:{tab_id:window.browserTabId,timestamp_millis:n}}})]})}function u(e){try{return new URL(e,window.location.origin)}catch(t){return}}function w(e){try{const t=performance.getEntriesByType("resource");return e?t.filter(e):t}catch(t){return[]}}function m(e){const t=u(e)?.pathname.split("/").pop()||e;return w(e=>("script"===e.initiatorType||"link"===e.initiatorType)&&e.name.includes(t)).map(e=>{const t=u(e.name)?.searchParams.get("retry-attempt"),n=t?parseInt(t,10):0;return{retry_attempt:Number.isNaN(n)?0:n,response_status:e.responseStatus??-1,duration_millis:Math.round(e.duration),transfer_size_bytes:e.transferSize??-1,encoded_body_size_bytes:e.encodedBodySize??-1,initiator_type:(i=e.initiatorType,{script:"SCRIPT",link:"LINK",css:"CSS",xmlhttprequest:"XMLHTTPREQUEST",fetch:"FETCH",beacon:"BEACON",img:"IMG",iframe:"IFRAME",navigation:"NAVIGATION"}[i]??"OTHER")};var i})}window.recordAppInitLog=function(e,i,a,s){if(!c)return;const d=Date.now(),l={method:"POST",body:p(e,i,d,a,s),headers:t(),keepalive:!0};_(n,d,l),r&&o!==n&&_(o,d,l)},window.recordAppInitChunkLoadFailure=function(e){const t=navigator.connection;window.recordAppInitLog?.("chunkLoadFailure","FAILURE",void 0,{chunk_load_failure:{chunk_id:e,chunk_src:u(e)?.pathname||e,attempts:m(e)},browser_performance:{navigator_online:navigator.onLine,navigator_connection_rtt_millis:t?.rtt??-1,navigator_connection_downlink_mbps:t?.downlink??-1}})},window.clearAppInitLogTimeout=function(){clearTimeout(a),clearInterval(s),window.removeEventListener("pagehide",b)};const f="appInitLogStartupHangTimestamp";"WORKSPACE_CONSOLE_HOST"===e.appSourceType&&(a=setTimeout(()=>{if(function(){try{const e=window.localStorage?.getItem(f);if(e)return Date.now()-parseInt(e,10)<12e4}catch(e){return!1}return!1}())window.recordAppInitLog?.("startupHangThrottle","SUCCESS");else{window.recordAppInitLog?.("startupHang","SUCCESS");try{window.localStorage?.setItem(f,Date.now().toString())}catch(e){return}}},6e4));const h=[0];function g(e){const{name:t,responseStatus:n}=e,i=h.includes(n),r=t.includes(".js")&&t.includes("&retry-attempt=3"),o=/(?:main|login)(?:\.[a-zA-Z0-9]+)?\.js/.test(t);return i&&(r||o)}function S(e){switch(e){case"beforeunload":return"BEFORE_UNLOAD";case"unload":return"UNLOAD";case"pagehide":return"PAGE_HIDE";case"authredirect":return"AUTH_REDIRECT";case"workspace_redirect":return"WORKSPACE_REDIRECT_REQUIRED";case"spog_renamed_redirect":return"SPOG_URL_RENAMED";case"spog_disabled_redirect":return"SPOG_DISABLED_URL_CUSTOMIZATION";case"spog_autoredirect":return"SPOG_AUTOREDIRECT_REQUIRED";case"azure_pending_signup_redirect":return"AZURE_PENDING_SIGNUP_REDIRECT_REQUIRED";default:return"TYPE_UNSPECIFIED"}}window.__DATABRICKS_SAFE_FLAGS__?.["databricks.fe.infra.enableStartupAppInitSNRAlerting"]&&(s=setInterval(()=>{const e=Object.entries(function(){const e={};return w(e=>"script"===e.initiatorType||"link"===e.initiatorType).filter(g).forEach(t=>{void 0===e[t.name]&&(e[t.name]=[]),e[t.name].push(t.responseStatus)}),e}());e.length>0&&(window.recordAppInitLog?.("clientNetworkScriptLoadFailure","FAILURE",{message:JSON.stringify({failedNetworkScripts:e})}),window.clearAppInitLogTimeout?.())},1e3));let y=!1;function b(e){if(y||!c||!navigator.sendBeacon)return;y=!0;const t=Date.now(),i=p("pageExitBeforeAppInitComplete","SUCCESS",t,void 0,{page_exit_event_type:S(e&&e.type||"unknown")});navigator.sendBeacon(n+t,i),r&&o!==n&&navigator.sendBeacon(o+t,i)}window.recordAppInitPageExit=b,window.addEventListener("pagehide",b);const I=e.shouldIgnoreError??(()=>!1);let A=0;function E(e,t){A++>4||I(e)||window.recordAppInitLog?.("jsExceptionV3","FAILURE",{message:e,error:t})}window.addEventListener("error",e=>{E(String(e.message),e.error??void 0)}),window.addEventListener("unhandledrejection",e=>{const t=String(e.reason);I(t)?e.preventDefault():E(t,e.reason instanceof Error?e.reason:void 0)}),window.recordAppInitLog("init","SUCCESS")}function startCdnAccessibilityProbe(){if(!(window.__DATABRICKS_SAFE_FLAGS__?.["databricks.ui.enableCdnAccessibilityProbe"]??!1))return;const e=window.__DATABRICKS_CONFIG__?.publicPath,t=Object.values(e??{}).find(e=>"string"==typeof e&&e.startsWith("https://"));if(void 0===t)return;let n;try{n=new URL(t,window.location.origin)}catch(s){return}const i="function"==typeof window.loadScriptWithTimeout,r=window.__DATABRICKS_SAFE_FLAGS__?.["databricks.ui.enableRecordCdnAccessibilityTest"]??!1,o={method:"GET",mode:"cors",credentials:"omit",cache:"no-cache",priority:"low"};function a(){let e=!1;const t=setTimeout(()=>a("LOAD_TIMEOUT"),8e3);function a(n){e||(e=!0,clearTimeout(t),r&&function(e){window.recordObservabilityEvent?.({entry:{app_init_log:{entity_id:"cdnAccessibilityTest",trace_id:window.getInitialLoadSpanDetails?.().traceId,cdn_info:{is_loaded_from_cdn:!0,is_cdn_accessible:"ACCESSIBLE"===e,cdn_inaccessible_reason:"ACCESSIBLE"===e?void 0:e,is_cdn_fallback_script_exist:i}}}})}(n))}let c;try{c=window.fetch(new URL("favicon.ico",n).href,o)}catch(s){return void a("LOAD_ERROR")}c.then(e=>e.ok?e.blob().then(e=>a(0===e.size?"HTTP_200_EMPTY_BODY":"ACCESSIBLE")):a("LOAD_ERROR")).catch(()=>a("LOAD_ERROR"))}"function"==typeof window.requestIdleCallback?window.requestIdleCallback(a,{timeout:1e3}):setTimeout(a,0)}function insertPreloadTag(e,t,n){const i=document.createElement("link");return i.rel="preload",i.href=e,i.as=t,i.fetchPriority=n,0!==i.href.indexOf(window.location.origin+"/")&&(i.crossOrigin="anonymous"),document.head.appendChild(i),i}function initializeChunkPreloader(e){const{preloadChunksURI:t,routePreloadChunksURI:n=[],deferredPreloadChunksURI:i}=e;window.__databricksPreloadedChunkUris=window.__databricksPreloadedChunkUris??[];const r=e=>(window.__DATABRICKS_CONFIG__.publicPath?.monolith||"/")+e,o=e=>{const t=window.__databricksPreloadedChunkUris;t&&!t.includes(e)&&t.push(e)};window.__databricksChunkPreloader={hasTrackedScripts:!1,preloadedChunks:new Set,prefetchedChunks:new Set,scriptChunks:new Set,isAlreadyHandled(e,t="preload"){return this.trackExistingScripts(),!!this.scriptChunks.has(e)||("preload"===t?this.preloadedChunks.has(e):"prefetch"===t&&(this.preloadedChunks.has(e)||this.prefetchedChunks.has(e)))},trackExistingScripts(){this.hasTrackedScripts||(document.querySelectorAll("script[src]").forEach(e=>{this.scriptChunks.add(e.src)}),this.hasTrackedScripts=!0)},preload(e,t="high"){const n=[];return e.forEach(e=>{const i=r(e);if(this.isAlreadyHandled(i,"preload"))return;this.preloadedChunks.add(i),o(i);const a=e.endsWith(".css")?"style":"script",s="style"===a?"low":t;n.push(insertPreloadTag(i,a,s))}),n},prefetch(e){e.forEach(e=>{if(this.isAlreadyHandled(e,"prefetch"))return;this.prefetchedChunks.add(e),window.__databricksPreloadedChunkUris?.push(e);const t=document.createElement("link");t.rel="prefetch",t.href=e,document.head.appendChild(t)})}};const a=window.__databricksChunkPreloader,s=a.preload(t);if(a.preload(n,"low"),i?.length){i.forEach(e=>o(r(e)));const e=e=>new Promise(t=>{e.addEventListener("load",t,{once:!0}),e.addEventListener("error",t,{once:!0})});Promise.all(s.map(e)).then(()=>a.preload(i))}}function startPublicUiFlagsPrefetch(e){const t=fetch(e).then(e=>{if(200!==e.status)throw new Error("Public-ui-flags Prefetch error: "+e.status);return e.json()});t.catch(()=>{}),window.prefetchedPublicUiFlagsProm=t}function initializePublicEndpointPrefetch(){const e=window.__DATABRICKS_SAFE_FLAGS__;if(e?.["databricks.fe.infra.enablePublicUiFlagsFetch"]){const t=Boolean(e["databricks.fe.infra.enablePublicUiFlagsReuse"]),n=new URLSearchParams(window.location.search),i=new URLSearchParams,r=t?n.get("account_id")??n.get("accountId")??void 0:void 0;r&&i.set("account_id",r);const o=window.__databricks_tuuid;o&&i.set("tuuid",o);const a=i.toString();startPublicUiFlagsPrefetch(a?"/public-ui-flags?"+a:"/public-ui-flags")}}function initializeWorkspacePublicUiFlagsPrefetch(){const e=window.__DATABRICKS_SAFE_FLAGS__;if(!e?.["databricks.fe.spog.useWorkspaceCbiFallbackUI"])return;if(!window.__databricks_isSpogDomain)return;const t=window.__databricks_workspaceParam;t&&startPublicUiFlagsPrefetch("/public-ui-flags?"+new URLSearchParams({o:t}).toString())}function __dbTrackModuleImport(e,t,n,i){if("undefined"==typeof window||"object"!=typeof performance)return i();const r=window.__dbModuleImportTracking=window.__dbModuleImportTracking||{},o=window.__dbModuleImportTrackingSeen=window.__dbModuleImportTrackingSeen||new Set;return o.has(e)||void 0!==r[e]?i():(r[e]={import:t,type:n,loadTime:{start:window.performance.now()}},o.add(e),i().finally(()=>{r[e].loadTime.end=window.performance.now()}))}function initApp(e){const{telemetryConfig:t,chunkPreloadConfig:n,prefetchEndpointsConfig:i}=e;installCdnOriginFallback(),n&&initializeChunkPreloader(n),initializeTelemetry(t),initializeAppInit(t),startCdnAccessibilityProbe(),i?.isPublic&&initializePublicEndpointPrefetch(),initializeWorkspacePublicUiFlagsPrefetch()}function serverSideSafeInHtml(e,t,n){const i=window.__DATABRICKS_SAFE_FLAGS_READ_IN_HTML__??[];i.some(t=>t.flagName===e)||i.push({flagName:e,defaultValue:t,testDefault:n}),window.__DATABRICKS_SAFE_FLAGS_READ_IN_HTML__=i;const r=window.__DATABRICKS_SAFE_FLAGS__?.[e];return void 0!==r?r:void 0!==n&&!0===window.__DATABRICKS_USE_TEST_DEFAULT_FLAG_VALUES__?n:t}const maybeWorkspaceParam=/^\d+/.exec(new URLSearchParams(window.location.search).get("o")??""),workspaceParam=null===maybeWorkspaceParam?void 0:maybeWorkspaceParam[0],telemetryUrlParams=workspaceParam?`?o=${workspaceParam}&t=`:"?t=",telemetryEndpoint=`/telemetry-unauth${telemetryUrlParams}`,unauthTelemetryEndpoint=`/telemetry-unauth${telemetryUrlParams}`;initApp({telemetryConfig:{appSourceType:"WORKSPACE_CONSOLE_LOGIN",getHeaders:function(){return workspaceParam?{"X-Databricks-Org-Id":workspaceParam.toString()}:{}},telemetryEndpoint:telemetryEndpoint,unauthTelemetryEndpoint:unauthTelemetryEndpoint,uiModuleName:"workspaceLogin"},prefetchEndpointsConfig:{isPublic:!0}})</script>
+  <uses-legacy-bootstrap>
+   <div id="login-page"></div>
+  </uses-legacy-bootstrap>
+ </body>
+</html>
