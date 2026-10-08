@@ -43,6 +43,13 @@ save_metrics(spark, m)
 Gaps are reported, not hidden. If a run is missing or failed, the run-coverage table lists the day
 and hour, and the results section says what happened and whether it changes any number.
 
+## Validation against WMATA
+
+`crosscheck.sql` pairs each graded departure in the window with WMATA's own trip-update delay for
+the same trip, taken at the nearest moment, and reports the pair count, correlation, and the median
+and p90 absolute difference. An early 2-minute sample (124 pairs) is not quoted; only the full-window
+run is.
+
 ## Optimization before and after
 
 `pipelines/optimize.py` measures both states under the same conditions:
