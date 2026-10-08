@@ -218,3 +218,18 @@ def test_fetch_copies_files_and_writes_manifest_last(tmp_path: Path) -> None:
 def test_fetch_fails_without_manifest(tmp_path: Path) -> None:
     with pytest.raises(FileNotFoundError):
         fetch(FakeFiles({}), "/Volumes/x", tmp_path)
+
+
+def test_fetch_refuses_an_html_sign_in_page_and_keeps_the_old_snapshot(tmp_path: Path) -> None:
+    (tmp_path / "manifest.json").write_text('{"generated_at_utc": "old"}')
+    page = b"<!doctype html><html><title>Sign In</title></html>"
+    files = FakeFiles({name: page for name in FILES})
+    with pytest.raises(ValueError, match="HTML page"):
+        fetch(files, "/Volumes/x", tmp_path)
+    assert json.loads((tmp_path / "manifest.json").read_text()) == {"generated_at_utc": "old"}
+    assert sorted(p.name for p in tmp_path.iterdir()) == ["manifest.json"]
+
+
+def test_fetch_refuses_a_manifest_that_is_not_json(tmp_path: Path) -> None:
+    with pytest.raises(ValueError, match="manifest.json"):
+        fetch(FakeFiles({"manifest.json": b"oops"}), "/Volumes/x", tmp_path)

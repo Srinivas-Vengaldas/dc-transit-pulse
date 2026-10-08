@@ -14,6 +14,7 @@ Credentials come from DATABRICKS_HOST and DATABRICKS_TOKEN in the environment
 from __future__ import annotations
 
 import argparse
+import json
 import logging
 import os
 from pathlib import Path
@@ -33,14 +34,35 @@ class FilesClient(Protocol):
     def download(self, file_path: str): ...
 
 
+def check(name: str, body: bytes) -> None:
+    """Refuse anything that is not snapshot data, before a single file is replaced.
+
+    A wrong DATABRICKS_HOST (for example the browser URL with `/?o=...`) makes every
+    download return the workspace sign-in page with status 200, so the bytes, not the
+    status, are what to check.
+    """
+    if body.lstrip()[:1] == b"<":
+        raise ValueError(
+            f"{name} is an HTML page, not snapshot data. Check that DATABRICKS_HOST is only "
+            "https://<workspace>.cloud.databricks.com (no path or ?o=) and that DATABRICKS_TOKEN is valid."
+        )
+    if name == "manifest.json":
+        try:
+            ok = isinstance(json.loads(body), dict)
+        except ValueError:
+            ok = False
+        if not ok:
+            raise ValueError("manifest.json is not a JSON object")
+
+
 def fetch(files: FilesClient, source: str, target: Path) -> dict[str, int]:
     """Copy every snapshot file that exists in `source` to `target`. Returns bytes per file.
 
-    Each file lands under a temp name and is renamed, and manifest.json goes last,
-    so an interrupted fetch never leaves a manifest that describes CSVs it does not have.
+    Everything is downloaded and checked first, so a bad download changes nothing.
+    Then each file lands under a temp name and is renamed, and manifest.json goes last,
+    so an interrupted write never leaves a manifest that describes CSVs it does not have.
     """
-    target.mkdir(parents=True, exist_ok=True)
-    sizes: dict[str, int] = {}
+    bodies: dict[str, bytes] = {}
     for name in sorted(FILES, key=lambda n: n == "manifest.json"):
         try:
             body = files.download(f"{source.rstrip('/')}/{name}").contents.read()
@@ -49,11 +71,14 @@ def fetch(files: FilesClient, source: str, target: Path) -> dict[str, int]:
                 raise
             log.warning("skipped %s: %s", name, exc)
             continue
+        check(name, body)
+        bodies[name] = body
+    target.mkdir(parents=True, exist_ok=True)
+    for name, body in bodies.items():
         tmp = target / f".{name}.tmp"
         tmp.write_bytes(body)
         os.replace(tmp, target / name)
-        sizes[name] = len(body)
-    return sizes
+    return {name: len(body) for name, body in bodies.items()}
 
 
 def main(argv: list[str] | None = None) -> int:
