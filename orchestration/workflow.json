@@ -1,6 +1,6 @@
 {
   "name": "dc-transit-pulse",
-  "description": "Collect WMATA bus GTFS-RT snapshots, then bronze -> silver -> gold.",
+  "description": "Collect WMATA bus GTFS-RT snapshots, then bronze -> silver -> gold -> quality -> dashboard export.",
   "tags": {
     "project": "dc-transit-pulse"
   },
@@ -135,6 +135,28 @@
       "depends_on": [
         {
           "task_key": "gold"
+        }
+      ]
+    },
+    {
+      "task_key": "export",
+      "spark_python_task": {
+        "python_file": "{repo}/orchestration/run_pipeline.py",
+        "parameters": [
+          "--step",
+          "export",
+          "--run-id",
+          "{{job.run_id}}"
+        ]
+      },
+      "environment_key": "default",
+      "max_retries": 1,
+      "min_retry_interval_millis": 60000,
+      "retry_on_timeout": true,
+      "timeout_seconds": 1800,
+      "depends_on": [
+        {
+          "task_key": "quality"
         }
       ]
     },

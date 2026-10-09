@@ -3,13 +3,14 @@
 The job (orchestration/workflow.json) runs these tasks, each calling this file
 with a different --step:
 
-    collect --> bronze --> silver --> gold --> quality
+    collect --> bronze --> silver --> gold --> quality --> export
     weather   (independent: a weather API outage never blocks the transit tables)
 
 - collect: polls WMATA for --polls snapshots and writes them straight into the
   landing folder of the raw Volume (the API key comes from a Databricks secret).
 - bronze / silver / gold: the existing pipeline functions.
 - quality: data-quality checks on the dates gold just rebuilt; fails the run on a critical failure.
+- export: writes the dashboard snapshot (aggregated CSVs) to the Volume; runs only if quality passed.
 
 Every step appends one row to ops_run_log (run id, step, start, end, status,
 metrics as JSON), even when it fails. That table is where the resume metrics
@@ -41,7 +42,7 @@ if str(REPO_ROOT) not in sys.path:
 
 log = logging.getLogger("run_pipeline")
 
-STEPS = ("collect", "bronze", "silver", "gold", "quality", "weather")
+STEPS = ("collect", "bronze", "silver", "gold", "quality", "export", "weather")
 FEED_URLS = {
     "vehicle_positions": "https://api.wmata.com/gtfs/bus-gtfsrt-vehiclepositions.pb",
     "trip_updates": "https://api.wmata.com/gtfs/bus-gtfsrt-tripupdates.pb",
@@ -101,6 +102,10 @@ def run_step(spark: SparkSession, step: str, args: argparse.Namespace) -> dict:
         from pipelines.quality import run_checks
 
         return run_checks(spark, run_id=args.run_id)
+    if step == "export":
+        from pipelines.export_dashboard import export_dashboard
+
+        return export_dashboard(spark, out_dir=f"{args.raw_volume}/exports/dashboard", run_id=args.run_id)
     if step == "weather":
         from pipelines.weather import load_weather
 
