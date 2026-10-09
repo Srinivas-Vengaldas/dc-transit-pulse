@@ -45,7 +45,8 @@ LOCAL_TZ = "America/New_York"
 MEASUREMENT_WINDOW: tuple[str, str] = ("2026-10-02", "2026-10-08")
 
 # The job starts at 06, 08, ..., 22 Eastern: 9 scheduled runs a day.
-RUNS_PER_DAY = 9
+SCHEDULED_HOURS: tuple[int, ...] = tuple(range(6, 23, 2))
+RUNS_PER_DAY = len(SCHEDULED_HOURS)
 
 ALL_TIME: tuple[str, str] = ("1900-01-01", "9999-12-31")
 
@@ -141,13 +142,11 @@ FROM (
 )
 WHERE {first_start_in_window}""",
     # Gaps, reported rather than hidden: scheduled runs that never started or did not finish.
+    # One row per calendar day, including days with no run at all (a day missing from the log
+    # is the worst gap, so it must not drop out). A scheduled slot counts as missed when no run
+    # started in that hour; runs started by hand at other hours are counted but fill no slot.
     "run_coverage": """
-SELECT run_date,
-       count(*) AS runs,
-       {runs_per_day} - count(*) AS missing_runs,
-       count_if(failed_steps > 0) AS failed_runs,
-       array_sort(collect_list(start_hour)) AS start_hours
-FROM (
+WITH runs AS (
   SELECT run_id,
          to_date(from_utc_timestamp(min(started_at), '{tz}')) AS run_date,
          hour(from_utc_timestamp(min(started_at), '{tz}')) AS start_hour,
@@ -159,10 +158,21 @@ FROM (
     WHERE run_id <> 'manual'
   )
   GROUP BY run_id
+),
+days AS (
+  SELECT explode(sequence(greatest(DATE'{start}', min(run_date)),
+                          least(DATE'{end}', max(run_date)))) AS run_date
+  FROM runs
 )
-WHERE run_date BETWEEN DATE'{start}' AND DATE'{end}'
-GROUP BY run_date
-ORDER BY run_date""",
+SELECT d.run_date,
+       count(r.run_id) AS runs,
+       size(array_except(array({scheduled_hours}), collect_list(r.start_hour))) AS missing_runs,
+       count_if(r.failed_steps > 0) AS failed_runs,
+       count_if(NOT array_contains(array({scheduled_hours}), r.start_hour)) AS off_schedule_runs,
+       array_sort(collect_list(r.start_hour)) AS start_hours
+FROM days AS d LEFT JOIN runs AS r ON r.run_date = d.run_date
+GROUP BY d.run_date
+ORDER BY d.run_date""",
 }
 
 
@@ -189,7 +199,7 @@ def metric_sql(
             tz=LOCAL_TZ,
             start=start,
             end=end,
-            runs_per_day=RUNS_PER_DAY,
+            scheduled_hours=", ".join(map(str, SCHEDULED_HOURS)),
             started_in_window=window("started_at"),
             first_start_in_window=window("first_start"),
             ingested_in_window=window("_ingested_at"),
@@ -248,6 +258,7 @@ def compute_metrics(
         "days": len(coverage),
         "missing_runs": sum(r["missing_runs"] for r in coverage),
         "failed_runs": sum(r["failed_runs"] for r in coverage),
+        "off_schedule_runs": sum(r["off_schedule_runs"] for r in coverage),
         "per_day": coverage,
     }
     log.info("metrics: %s", out)

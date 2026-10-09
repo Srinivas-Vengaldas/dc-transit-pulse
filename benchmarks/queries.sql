@@ -87,12 +87,7 @@ FROM (
 WHERE to_date(from_utc_timestamp(first_start, 'America/New_York')) BETWEEN DATE'2026-10-02' AND DATE'2026-10-08';
 
 -- run_coverage
-SELECT run_date,
-       count(*) AS runs,
-       9 - count(*) AS missing_runs,
-       count_if(failed_steps > 0) AS failed_runs,
-       array_sort(collect_list(start_hour)) AS start_hours
-FROM (
+WITH runs AS (
   SELECT run_id,
          to_date(from_utc_timestamp(min(started_at), 'America/New_York')) AS run_date,
          hour(from_utc_timestamp(min(started_at), 'America/New_York')) AS start_hour,
@@ -104,7 +99,18 @@ FROM (
     WHERE run_id <> 'manual'
   )
   GROUP BY run_id
+),
+days AS (
+  SELECT explode(sequence(greatest(DATE'2026-10-02', min(run_date)),
+                          least(DATE'2026-10-08', max(run_date)))) AS run_date
+  FROM runs
 )
-WHERE run_date BETWEEN DATE'2026-10-02' AND DATE'2026-10-08'
-GROUP BY run_date
-ORDER BY run_date;
+SELECT d.run_date,
+       count(r.run_id) AS runs,
+       size(array_except(array(6, 8, 10, 12, 14, 16, 18, 20, 22), collect_list(r.start_hour))) AS missing_runs,
+       count_if(r.failed_steps > 0) AS failed_runs,
+       count_if(NOT array_contains(array(6, 8, 10, 12, 14, 16, 18, 20, 22), r.start_hour)) AS off_schedule_runs,
+       array_sort(collect_list(r.start_hour)) AS start_hours
+FROM days AS d LEFT JOIN runs AS r ON r.run_date = d.run_date
+GROUP BY d.run_date
+ORDER BY d.run_date;

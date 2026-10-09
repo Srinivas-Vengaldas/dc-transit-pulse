@@ -213,8 +213,9 @@ def test_compute_metrics(tables) -> None:
     # r1 and r2 succeeded (r2's bronze retry succeeded last); r3's gold failed. "manual" is not a job run.
     assert m["job_runs"]["runs"] == 3 and m["job_runs"]["succeeded"] == 2
     assert m["step_runtime"]["bronze"]["failed"] == 1
-    # D1 had 2 of 9 scheduled runs; D2 had 1, and it failed at gold.
-    assert (m["run_coverage"]["days"], m["run_coverage"]["missing_runs"]) == (2, 7 + 8)
+    # D1 had 2 of 9 scheduled runs, the day between had none, and D2 had 1, which failed at gold.
+    assert (m["run_coverage"]["days"], m["run_coverage"]["missing_runs"]) == (3, 7 + 9 + 8)
+    assert m["run_coverage"]["per_day"][1]["runs"] == 0
     assert m["run_coverage"]["failed_runs"] == 1
     assert m["run_coverage"]["per_day"][0]["start_hours"] == [10, 12]  # 14:00 and 16:00 UTC in Eastern
 
