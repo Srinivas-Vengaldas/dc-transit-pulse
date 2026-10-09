@@ -17,6 +17,8 @@ the riders waiting for the next one, slows down further, and the bus behind catc
 arrive together, then nobody comes for twice the scheduled gap. That is bunching, and an average
 hides it. This project measures it per route, hour and stop from WMATA's own real-time data.
 
+![A real bunching event: scheduled vs actual departures on route D80](docs/screenshots/bunching.png)
+
 ## Results
 
 Measured over a window fixed in code before the data was in: **2026-10-02 to 2026-10-08, 7 full
@@ -64,6 +66,8 @@ the compaction from 147 small files to 1, which keeps the next months of 2-hourl
 3. **Reliability depends on the route.** Among the 96 routes with at least 100 departures, on time
    ranges from 58.6% (D2X H St Limited) to 89.5% (F44 Columbia Pike-Pentagon). C53 U St-Congress
    Hts combines a low on-time rate (60.9%) with the most bunching of the large routes (9.3%).
+
+![Timepoint stops colored by on-time rate versus the system average](docs/screenshots/map.png)
 
 ### Limitations
 
