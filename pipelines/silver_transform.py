@@ -314,13 +314,18 @@ def reset_silver(
     A table and its checkpoint are one unit: the checkpoint records which bronze
     rows were already written to the table. Dropping only the table leaves a
     checkpoint that says "done", and the rebuilt table stays empty.
+
+    Checkpoints go first and every one must be gone before any table is dropped,
+    so a delete that fails partway leaves all tables in place instead of a dropped
+    table next to a half-deleted checkpoint.
     """
-    for feed, spec in FEEDS.items():
-        spark.sql(f"DROP TABLE IF EXISTS {spec.silver_table(catalog, schema)}")
+    for feed in FEEDS:
         for path in checkpoint_paths(raw_volume, feed).values():
             shutil.rmtree(path, ignore_errors=True)
             if os.path.exists(path):
-                raise RuntimeError(f"could not delete checkpoint {path}")
+                raise RuntimeError(f"could not delete checkpoint {path}; no table was dropped")
+    for spec in FEEDS.values():
+        spark.sql(f"DROP TABLE IF EXISTS {spec.silver_table(catalog, schema)}")
     spark.sql(f"DROP TABLE IF EXISTS {catalog}.{schema}.silver_quarantine")
     log.info("silver tables and checkpoints removed")
 
