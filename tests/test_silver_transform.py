@@ -260,3 +260,13 @@ def test_dropping_only_the_table_is_caught_and_reset_rebuilds(spark, lake) -> No
 
     reset_silver(spark, lake["raw_volume"], lake["catalog"], lake["schema"])
     assert run_silver_feed(spark, "vehicle_positions", **lake)["silver_rows_added"] == 2
+
+
+def test_reset_drops_no_table_if_a_checkpoint_cannot_be_deleted(spark, lake, monkeypatch) -> None:
+    t0 = epoch(2026, 10, 1, 4, 30)
+    append_bronze(spark, "vehicle_positions", [vp("1", t0)])
+    run_silver_feed(spark, "vehicle_positions", **lake)
+    monkeypatch.setattr("pipelines.silver_transform.shutil.rmtree", lambda *a, **k: None)
+    with pytest.raises(RuntimeError, match="no table was dropped"):
+        reset_silver(spark, lake["raw_volume"], lake["catalog"], lake["schema"])
+    assert spark.catalog.tableExists("spark_catalog.t_silver.silver_vehicle_positions")
