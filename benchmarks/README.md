@@ -66,4 +66,5 @@ The gold step's runtime in scheduled runs before and after the change is a secon
 
 ## Results
 
-Filled in after the window closes. See the main README.
+Measured on 2026-10-09 and recorded in `ops_metric_results` and `ops_benchmarks`. The numbers and
+the gaps are in the main README's results section.

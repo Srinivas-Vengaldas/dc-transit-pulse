@@ -9,7 +9,6 @@ public site.
 **Live site: https://dc-transit-pulse-eta.vercel.app**
 
 ![The showcase site: headline takeaway and KPIs](docs/screenshots/hero.png)
-<!-- [TBD 2026-10-09] replace with a screenshot of the final snapshot -->
 
 ## The problem
 
@@ -27,25 +26,44 @@ explains the method.
 
 | Metric | Result |
 |---|---|
-| Events ingested per day (both feeds) | [TBD] mean, [TBD] to [TBD] |
-| Freshness, newest departure to gold build | median [TBD] min, p95 [TBD] min |
-| Duplicate and late rows removed | vehicle positions [TBD]%, trip updates [TBD]% |
-| Data-quality checks passed | [TBD]% of [TBD] checks over [TBD] runs |
-| Scheduled runs succeeded | [TBD] of [TBD] (gaps listed below) |
-| Departures graded | [TBD] |
-| On time (2 min early to 7 min late) | [TBD]%, rush hour [TBD]% vs [TBD]% other hours |
-| Gaps where buses bunched | [TBD]% |
-| Gold query time after clustering + OPTIMIZE | [TBD] s to [TBD] s ([TBD]% faster), files [TBD] to [TBD] |
-| Our delay vs WMATA's own reported delay (validation) | r = [TBD] on [TBD] pairs |
-| Cost | [TBD] (Databricks Free Edition, Vercel Hobby, GitHub Actions on a public repo) |
+| Events ingested (both feeds) | 1.82M over 6 logged days: 303K a day on average, 176K to 426K |
+| Freshness, newest departure to gold build | median 6.1 min, p95 7.0 min, worst 7.2 min (44 builds) |
+| Duplicate and late rows removed | vehicle positions 5.9% (37,956 of 644,460), trip updates 2.7% (31,531 of 1,175,929) |
+| Data-quality checks passed | 100%: 528 of 528 checks over 44 runs |
+| Scheduled runs | 43 of 63 started (gap below); all 44 runs, including one manual, succeeded |
+| Departures graded | 22,780 |
+| On time (2 min early to 7 min late) | 75.5%: weekdays 74.7%, weekends 77.0% |
+| Gaps where buses bunched | 2.7% of 15,925 gaps: weekdays 3.3%, weekends 1.6% |
+| Clustering + OPTIMIZE | files 147 to 1 per silver table, 8 to 1 per gold table; query time unchanged at this size (below) |
+| Our delay vs WMATA's own reported delay (validation) | r = 0.977 on 22,780 pairs, median difference 31 s, p90 91 s |
+| Cost | $0 (Databricks Free Edition, Vercel Hobby, GitHub Actions on a public repo) |
 
-**Gaps in the window:** [TBD from the run-coverage query: missing or failed runs, and what was done.]
+**Gaps in the window.** The scheduler stopped starting runs after 12:00 ET on Oct 6 and resumed by
+itself at 18:00 on Oct 8, while the schedule showed Active. No run failed; 20 of 63 scheduled runs
+never started (5 on Oct 6, all 9 on Oct 7, 6 on Oct 8), and one run was started by hand at 17:15
+on Oct 8 to confirm the job still worked. The cause was not found, so every number above covers 6
+logged days, two of them partial, and Oct 7 has no data. The run-coverage query first reported 10
+missed runs because it skipped days with no runs at all; that was fixed before these numbers were
+taken. Separately, `silver_vehicle_positions` was found dropped on Oct 9 before measuring and was
+restored intact with `UNDROP TABLE` (734,544 rows); nothing in the pipeline drops it on its own.
+
+**Clustering, honestly.** Each benchmark query ran 5 times before and after, on the same compute.
+The median went from 0.83 s to 0.73 s on the gold aggregate, 1.28 s to 1.30 s on a gold
+route-and-day lookup, and 1.97 s to 2.22 s on a silver lookup. At under a million rows every query
+is mostly fixed overhead, so file layout does not show up in query time yet; the measured win is
+the compaction from 147 small files to 1, which keeps the next months of 2-hourly appends cheap.
 
 ### What the data shows
 
-1. [TBD insight 1]
-2. [TBD insight 2]
-3. [TBD insight 3]
+1. **About one departure in four is not on time.** 75.5% of 22,780 graded departures left between
+   2 minutes early and 7 minutes late.
+2. **Weekends are steadier; rush hour is not worse.** Weekends were 77.0% on time with half the
+   bunching of weekdays (1.6% vs 3.3% of gaps). Weekday rush hour matched other hours (75.4% vs
+   75.3% across the snapshot). An early 5-day sample said rush hour was worse (73.0% vs 75.8%);
+   that difference disappeared with four times the data.
+3. **Reliability depends on the route.** Among the 96 routes with at least 100 departures, on time
+   ranges from 58.6% (D2X H St Limited) to 89.5% (F44 Columbia Pike-Pentagon). C53 U St-Congress
+   Hts combines a low on-time rate (60.9%) with the most bunching of the large routes (9.3%).
 
 ### Limitations
 
@@ -56,7 +74,10 @@ explains the method.
   comparing with its published figures.
 - An observed departure is the midpoint of two GPS pings at most 120 s apart, so each one carries
   up to 60 s of error (stored per row as `max_error_s`).
-- Weather is hourly for one point in DC, so "wet" means rain fell somewhere in that hour.
+- Weather is hourly for one point in DC, so "wet" means rain fell somewhere in that hour. The window
+  had only 7 wet hours, too few to say anything about rain.
+- Route and hour breakdowns on the site cover the whole snapshot (Sep 28 onward), not only the
+  measurement window.
 
 ## Architecture
 
