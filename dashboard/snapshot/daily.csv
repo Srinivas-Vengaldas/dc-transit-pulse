@@ -12,3 +12,4 @@ service_date,day_of_week,departures,on_time,routes,vehicles,headways,bunched
 2026-10-11,Sun,3904,2985,103,721,2929,35
 2026-10-12,Mon,4256,3131,106,787,3203,76
 2026-10-13,Tue,2303,1807,126,857,1243,36
+2026-10-15,Thu,2926,2098,126,977,1720,75
