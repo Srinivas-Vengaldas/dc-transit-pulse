@@ -1,5 +1,5 @@
 weather,rush,hours,departures,on_time,avg_delay_s
-dry,False,180,42300,31501,173.8
-dry,True,50,19155,14589,179.0
+dry,False,192,45232,33623,174.7
+dry,True,56,21435,16357,178.4
 wet,False,24,4560,3392,161.0
 wet,True,1,569,460,46.2
