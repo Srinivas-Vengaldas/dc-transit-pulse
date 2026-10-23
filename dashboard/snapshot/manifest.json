@@ -1,18 +1,18 @@
 {
-  "generated_at_utc": "2026-10-22T02:17:54+00:00",
-  "run_id": "1083117447191226",
+  "generated_at_utc": "2026-10-23T02:18:14+00:00",
+  "run_id": "703303299739657",
   "service_dates": {
     "first_service_date": "2026-09-28",
-    "last_service_date": "2026-10-21"
+    "last_service_date": "2026-10-22"
   },
   "rows": {
     "route_summary": 126,
-    "route_hour": 3643,
-    "daily": 20,
+    "route_hour": 3649,
+    "daily": 21,
     "stops": 1064,
     "weather": 4,
     "bunching_example": 13,
-    "pipeline_runs": 1033,
+    "pipeline_runs": 1096,
     "dq_checks": 12
   },
   "skipped": [],
@@ -33,104 +33,104 @@
   },
   "metrics": {
     "window": null,
-    "days_logged": 19,
-    "avg_events_per_full_day": 341987,
+    "days_logged": 20,
+    "avg_events_per_full_day": 347971,
     "min_events_per_day": 175684,
     "max_events_per_day": 526978,
-    "total_events": 6477809,
+    "total_events": 6914515,
     "freshness": {
-      "builds": 147,
-      "median_s": 369.0,
-      "p95_s": 442.8999999999999,
-      "mean_s": 373.4,
+      "builds": 156,
+      "median_s": 371.0,
+      "p95_s": 445.0,
+      "mean_s": 374.7,
       "min_s": 296,
       "max_s": 472
     },
     "rows_removed": {
       "vehicle_positions": {
         "feed": "vehicle_positions",
-        "bronze": 2191162,
-        "silver": 2067497,
+        "bronze": 2344688,
+        "silver": 2212360,
         "quarantined": 0,
-        "removed": 123665,
+        "removed": 132328,
         "pct_removed": 5.64
       },
       "trip_updates": {
         "feed": "trip_updates",
-        "bronze": 4298253,
-        "silver": 4196846,
+        "bronze": 4581433,
+        "silver": 4472305,
         "quarantined": 0,
-        "removed": 101407,
-        "pct_removed": 2.36
+        "removed": 109128,
+        "pct_removed": 2.38
       }
     },
     "data_quality": {
-      "runs": 146,
-      "checks": 1752,
-      "passed": 1752,
+      "runs": 155,
+      "checks": 1860,
+      "passed": 1860,
       "pct_checks_passed": 100.0,
-      "runs_all_passed": 146
+      "runs_all_passed": 155
     },
     "job_runs": {
-      "runs": 148,
-      "succeeded": 146,
-      "pct_succeeded": 98.65,
+      "runs": 157,
+      "succeeded": 155,
+      "pct_succeeded": 98.73,
       "first_run": "2026-10-01 21:48:17.335865",
-      "last_run": "2026-10-22 02:00:42.198243"
+      "last_run": "2026-10-23 02:00:31.450037"
     },
     "step_runtime": {
       "bronze": {
         "step": "bronze",
-        "attempts": 148,
+        "attempts": 157,
         "failed": 0,
-        "median_s": 38.0,
+        "median_s": 39.0,
         "max_s": 57
       },
       "collect": {
         "step": "collect",
-        "attempts": 148,
+        "attempts": 157,
         "failed": 0,
         "median_s": 573.0,
         "max_s": 575
       },
       "export": {
         "step": "export",
-        "attempts": 144,
+        "attempts": 153,
         "failed": 0,
-        "median_s": 35.0,
+        "median_s": 36.0,
         "max_s": 101
       },
       "gold": {
         "step": "gold",
-        "attempts": 147,
+        "attempts": 156,
         "failed": 0,
         "median_s": 33.0,
         "max_s": 41
       },
       "quality": {
         "step": "quality",
-        "attempts": 146,
+        "attempts": 155,
         "failed": 0,
-        "median_s": 16.0,
+        "median_s": 17.0,
         "max_s": 20
       },
       "silver": {
         "step": "silver",
-        "attempts": 150,
+        "attempts": 159,
         "failed": 3,
         "median_s": 218.0,
         "max_s": 300
       },
       "weather": {
         "step": "weather",
-        "attempts": 150,
+        "attempts": 159,
         "failed": 4,
         "median_s": 57.0,
         "max_s": 68
       }
     },
     "run_coverage": {
-      "days": 21,
+      "days": 22,
       "missing_runs": 44,
       "failed_runs": 2,
       "off_schedule_runs": 2,
@@ -454,6 +454,24 @@
         },
         {
           "run_date": "2026-10-21",
+          "runs": 9,
+          "missing_runs": 0,
+          "failed_runs": 0,
+          "off_schedule_runs": 0,
+          "start_hours": [
+            6,
+            8,
+            10,
+            12,
+            14,
+            16,
+            18,
+            20,
+            22
+          ]
+        },
+        {
+          "run_date": "2026-10-22",
           "runs": 9,
           "missing_runs": 0,
           "failed_runs": 0,
