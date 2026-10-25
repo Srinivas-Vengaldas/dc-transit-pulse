@@ -1,18 +1,18 @@
 {
-  "generated_at_utc": "2026-10-24T02:17:47+00:00",
-  "run_id": "903543750633062",
+  "generated_at_utc": "2026-10-25T02:17:07+00:00",
+  "run_id": "1098204957801254",
   "service_dates": {
     "first_service_date": "2026-09-28",
-    "last_service_date": "2026-10-23"
+    "last_service_date": "2026-10-24"
   },
   "rows": {
     "route_summary": 126,
-    "route_hour": 3651,
-    "daily": 22,
+    "route_hour": 3662,
+    "daily": 23,
     "stops": 1064,
     "weather": 4,
     "bunching_example": 13,
-    "pipeline_runs": 1159,
+    "pipeline_runs": 1223,
     "dq_checks": 12
   },
   "skipped": [],
@@ -33,104 +33,104 @@
   },
   "metrics": {
     "window": null,
-    "days_logged": 21,
-    "avg_events_per_full_day": 352641,
+    "days_logged": 22,
+    "avg_events_per_full_day": 358132,
     "min_events_per_day": 175684,
     "max_events_per_day": 526978,
-    "total_events": 7376985,
+    "total_events": 7865482,
     "freshness": {
-      "builds": 165,
+      "builds": 174,
       "median_s": 372.0,
       "p95_s": 445.0,
-      "mean_s": 375.8,
+      "mean_s": 375.6,
       "min_s": 296,
       "max_s": 472
     },
     "rows_removed": {
       "vehicle_positions": {
         "feed": "vehicle_positions",
-        "bronze": 2496683,
-        "silver": 2356165,
+        "bronze": 2604341,
+        "silver": 2458122,
         "quarantined": 0,
-        "removed": 140518,
-        "pct_removed": 5.63
+        "removed": 146219,
+        "pct_removed": 5.61
       },
       "trip_updates": {
         "feed": "trip_updates",
-        "bronze": 4891908,
-        "silver": 4776193,
+        "bronze": 5272747,
+        "silver": 5151896,
         "quarantined": 0,
-        "removed": 115715,
-        "pct_removed": 2.37
+        "removed": 120851,
+        "pct_removed": 2.29
       }
     },
     "data_quality": {
-      "runs": 164,
-      "checks": 1968,
-      "passed": 1968,
+      "runs": 173,
+      "checks": 2076,
+      "passed": 2076,
       "pct_checks_passed": 100.0,
-      "runs_all_passed": 164
+      "runs_all_passed": 173
     },
     "job_runs": {
-      "runs": 166,
-      "succeeded": 164,
-      "pct_succeeded": 98.8,
+      "runs": 175,
+      "succeeded": 173,
+      "pct_succeeded": 98.86,
       "first_run": "2026-10-01 21:48:17.335865",
-      "last_run": "2026-10-24 02:00:32.295774"
+      "last_run": "2026-10-25 02:00:40.211961"
     },
     "step_runtime": {
       "bronze": {
         "step": "bronze",
-        "attempts": 166,
+        "attempts": 175,
         "failed": 0,
         "median_s": 39.0,
         "max_s": 57
       },
       "collect": {
         "step": "collect",
-        "attempts": 166,
+        "attempts": 175,
         "failed": 0,
         "median_s": 573.0,
         "max_s": 575
       },
       "export": {
         "step": "export",
-        "attempts": 162,
+        "attempts": 171,
         "failed": 0,
         "median_s": 36.0,
         "max_s": 101
       },
       "gold": {
         "step": "gold",
-        "attempts": 165,
+        "attempts": 174,
         "failed": 0,
         "median_s": 33.0,
         "max_s": 42
       },
       "quality": {
         "step": "quality",
-        "attempts": 164,
+        "attempts": 173,
         "failed": 0,
         "median_s": 17.0,
         "max_s": 20
       },
       "silver": {
         "step": "silver",
-        "attempts": 168,
+        "attempts": 177,
         "failed": 3,
         "median_s": 219.0,
         "max_s": 300
       },
       "weather": {
         "step": "weather",
-        "attempts": 168,
-        "failed": 4,
+        "attempts": 178,
+        "failed": 5,
         "median_s": 57.0,
         "max_s": 74
       }
     },
     "run_coverage": {
-      "days": 23,
+      "days": 24,
       "missing_runs": 44,
       "failed_runs": 2,
       "off_schedule_runs": 2,
@@ -490,6 +490,24 @@
         },
         {
           "run_date": "2026-10-23",
+          "runs": 9,
+          "missing_runs": 0,
+          "failed_runs": 0,
+          "off_schedule_runs": 0,
+          "start_hours": [
+            6,
+            8,
+            10,
+            12,
+            14,
+            16,
+            18,
+            20,
+            22
+          ]
+        },
+        {
+          "run_date": "2026-10-24",
           "runs": 9,
           "missing_runs": 0,
           "failed_runs": 0,
