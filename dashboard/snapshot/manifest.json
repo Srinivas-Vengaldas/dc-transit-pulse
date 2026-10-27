@@ -1,18 +1,18 @@
 {
-  "generated_at_utc": "2026-10-26T02:17:03+00:00",
-  "run_id": "1014911452482554",
+  "generated_at_utc": "2026-10-26T16:17:44+00:00",
+  "run_id": "799752293034728",
   "service_dates": {
     "first_service_date": "2026-09-28",
-    "last_service_date": "2026-10-25"
+    "last_service_date": "2026-10-26"
   },
   "rows": {
     "route_summary": 126,
-    "route_hour": 3664,
-    "daily": 24,
+    "route_hour": 3665,
+    "daily": 25,
     "stops": 1064,
     "weather": 4,
     "bunching_example": 13,
-    "pipeline_runs": 1286,
+    "pipeline_runs": 1314,
     "dq_checks": 12
   },
   "skipped": [],
@@ -33,105 +33,105 @@
   },
   "metrics": {
     "window": null,
-    "days_logged": 23,
-    "avg_events_per_full_day": 364340,
+    "days_logged": 24,
+    "avg_events_per_full_day": 365775,
     "min_events_per_day": 175684,
     "max_events_per_day": 526978,
-    "total_events": 8261383,
+    "total_events": 8453875,
     "freshness": {
-      "builds": 183,
+      "builds": 187,
       "median_s": 373.0,
-      "p95_s": 444.30000000000007,
-      "mean_s": 375.9,
+      "p95_s": 445.0,
+      "mean_s": 376.5,
       "min_s": 296,
       "max_s": 472
     },
     "rows_removed": {
       "vehicle_positions": {
         "feed": "vehicle_positions",
-        "bronze": 2694505,
-        "silver": 2542918,
+        "bronze": 2759202,
+        "silver": 2603909,
         "quarantined": 0,
-        "removed": 151587,
+        "removed": 155293,
         "pct_removed": 5.63
       },
       "trip_updates": {
         "feed": "trip_updates",
-        "bronze": 5578484,
-        "silver": 5452505,
+        "bronze": 5706279,
+        "silver": 5577123,
         "quarantined": 0,
-        "removed": 125979,
+        "removed": 129156,
         "pct_removed": 2.26
       }
     },
     "data_quality": {
-      "runs": 182,
-      "checks": 2184,
-      "passed": 2184,
+      "runs": 186,
+      "checks": 2232,
+      "passed": 2232,
       "pct_checks_passed": 100.0,
-      "runs_all_passed": 182
+      "runs_all_passed": 186
     },
     "job_runs": {
-      "runs": 184,
-      "succeeded": 182,
-      "pct_succeeded": 98.91,
+      "runs": 188,
+      "succeeded": 186,
+      "pct_succeeded": 98.94,
       "first_run": "2026-10-01 21:48:17.335865",
-      "last_run": "2026-10-26 02:00:38.023164"
+      "last_run": "2026-10-26 16:00:37.992101"
     },
     "step_runtime": {
       "bronze": {
         "step": "bronze",
-        "attempts": 184,
+        "attempts": 188,
         "failed": 0,
         "median_s": 39.0,
         "max_s": 57
       },
       "collect": {
         "step": "collect",
-        "attempts": 184,
+        "attempts": 188,
         "failed": 0,
         "median_s": 573.0,
         "max_s": 575
       },
       "export": {
         "step": "export",
-        "attempts": 180,
+        "attempts": 184,
         "failed": 0,
         "median_s": 36.0,
         "max_s": 101
       },
       "gold": {
         "step": "gold",
-        "attempts": 183,
+        "attempts": 187,
         "failed": 0,
         "median_s": 33.0,
         "max_s": 42
       },
       "quality": {
         "step": "quality",
-        "attempts": 182,
+        "attempts": 186,
         "failed": 0,
         "median_s": 17.0,
         "max_s": 20
       },
       "silver": {
         "step": "silver",
-        "attempts": 186,
+        "attempts": 190,
         "failed": 3,
-        "median_s": 219.0,
+        "median_s": 219.5,
         "max_s": 300
       },
       "weather": {
         "step": "weather",
-        "attempts": 187,
+        "attempts": 191,
         "failed": 5,
         "median_s": 57.0,
         "max_s": 74
       }
     },
     "run_coverage": {
-      "days": 25,
-      "missing_runs": 44,
+      "days": 26,
+      "missing_runs": 49,
       "failed_runs": 2,
       "off_schedule_runs": 2,
       "per_day": [
@@ -540,6 +540,19 @@
             18,
             20,
             22
+          ]
+        },
+        {
+          "run_date": "2026-10-26",
+          "runs": 4,
+          "missing_runs": 5,
+          "failed_runs": 0,
+          "off_schedule_runs": 0,
+          "start_hours": [
+            6,
+            8,
+            10,
+            12
           ]
         }
       ]
